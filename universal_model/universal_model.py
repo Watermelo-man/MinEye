@@ -3,17 +3,18 @@ from modelType import *
 from kernel import *
 
 
+#create fabric
+SelectModelbyInputAndKernel = fabric() 
 #add different types here    
-SelectModelbyInputAndKernel = fabric()
 SelectModelbyInputAndKernel.addType("IMGPIL",modelIMGPIL)
 SelectModelbyInputAndKernel.addType("LiveVideo",modelVideoCapture)
 #... add another type
 #add different types here
 
 
-Kernel = kernel("models/onlygold.pt","cpu")
+Kernel = kernel("C:/Projects/orereco/ourmodels/onlygold.pt","cpu")
 
-memodel = SelectModelbyInputAndKernel.selectModel(Kernel, "IMG")
+memodel = SelectModelbyInputAndKernel.selectModel(Kernel, "IMGPIL")
 print (type(memodel))
 
 
