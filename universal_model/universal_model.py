@@ -12,20 +12,29 @@ SelectModelbyInputAndKernel.addType("LiveVideo",modelVideoCapture)
 #add different types here
 
 
-Kernel = kernel("C:/Projects/orereco/ourmodels/onlygold.pt","cpu")
+Kernel = kernel("C:/Projects/orereco/ourmodels/yolov5x.pt","cpu")
 
-memodel = SelectModelbyInputAndKernel.selectModel(Kernel, "IMGPIL")
+memodel = SelectModelbyInputAndKernel.selectModel(Kernel, "LiveVideo")
 print (type(memodel))
 
 
 
-im =  PIL.Image.open("source/0010.jpg")
+#im =  PIL.Image.open("source/0010.jpg")
+im = cv2.VideoCapture(0)
 
 
-memodel.predict(im , 640, 0.5,0.5)
 
-out = cv2.resize(memodel._show_last_result(),(640,480))
 
-cv2.imshow('Noutput', out)
+
+while(True):
+    memodel.predict(im , 640, 0.4,0.4)
+
+
+    out = cv2.resize(memodel._show_last_result(),(640,480))
+    cv2.imshow('Noutput', out)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+im.release()
+
 cv2.waitKey()
 

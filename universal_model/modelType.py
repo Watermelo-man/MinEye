@@ -30,23 +30,40 @@ class modelIMGPIL():
 class modelVideoCapture(): ## NEEDS TO CHANGE, IT DOESNT WORK
     Kernel:yolov5
     last_result = None
-
+    camera = None
     def __init__(self, Kernel:kernel):
         self.Kernel = Kernel
         
-    def predict(self,image:PIL.Image , image_size:int, confcoeff:float, iou:float):
+
+
+    def predict(self,camera , image_size:int, confcoeff:float, iou:float):
+
+
+        ret, shot = camera.read()
+    
+
+
+
+       # shot = cv2.cvtColor(shot, cv2.COLOR_BGR2RGB)
+        shot_pil = PIL.Image.fromarray(shot)
+
+
+
+
         if confcoeff!=None or iou!=None:
             self.Kernel.conf = confcoeff
             self.Kernel.iou = iou
         else:
             self.Kernel.conf = 0
             self.Kernel.iou = 0
-        self.last_result =  self.Kernel([image], size=image_size)
+        self.last_result =  self.Kernel([shot_pil], size=image_size)
 
     def _show_last_result(self):
         if self.last_result!= None:
+            
             return self.last_result.render()[0]
         else:
+            
             return None
         
 

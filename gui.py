@@ -14,7 +14,7 @@ import universal_model.universal_model
 
 
 
-Kernel = kernel("ourmodels/onlygold.pt","cpu")
+#Kernel = kernel("ourmodels/onlygold.pt","cpu")
 
 app = QApplication(sys.argv)
 
