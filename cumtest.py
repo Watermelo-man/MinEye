@@ -1,14 +1,24 @@
 import cv2
 import numpy as np
+import torch
 
-cap = cv2.VideoCapture(0)
 
-while True:
-    ret, frame = cap.read()
-    cv2.imshow('video feed', frame)
+print(torch.cuda.is_available())
+
+
+print(torch.cuda.current_device())
+
+print(torch.cuda.get_device_name(0))
+
+
+# cap = cv2.VideoCapture(0)
+
+# while True:
+#     ret, frame = cap.read()
+#     cv2.imshow('video feed', frame)
     
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
         
-cap.release()
-cv2.destroyAllWindows()
+# cap.release()
+# cv2.destroyAllWindows()

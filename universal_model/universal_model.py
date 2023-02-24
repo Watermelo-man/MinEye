@@ -12,7 +12,7 @@ SelectModelbyInputAndKernel.addType("LiveVideo",modelVideoCapture)
 #add different types here
 
 
-Kernel = kernel("C:/Projects/orereco/ourmodels/yolov5x.pt","cpu")
+Kernel = kernel("C:/Projects/orereco/ourmodels/yolov5x.pt","cuda:0")
 
 memodel = SelectModelbyInputAndKernel.selectModel(Kernel, "LiveVideo")
 print (type(memodel))
@@ -27,7 +27,7 @@ im = cv2.VideoCapture(0)
 
 
 while(True):
-    memodel.predict(im , 640, 0.4,0.4)
+    memodel.predict(im , 640, 0.3,0.3)
 
 
     out = cv2.resize(memodel._show_last_result(),(640,480))
