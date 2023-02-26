@@ -12,7 +12,7 @@ class kernel():
         self.kernel = torch.hub.load('./yolov5', 'custom', path = model_path, source='local',device=device)  # local repo
 
 #kek = kernel()
-
+"""
 ker = kernel()
 
 
@@ -33,3 +33,4 @@ while(True):
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     #print(res)
+"""
