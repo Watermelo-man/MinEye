@@ -3,16 +3,17 @@ import cv2
 import PIL
 from kernel import *
 import yolov5
+import numpy
 
 
 class modelIMGPIL():
     Kernel:yolov5
     last_result = None
-
     def __init__(self, Kernel:kernel):
         self.Kernel = Kernel
         
     def predict(self,image:PIL.Image , image_size:int, confcoeff:float, iou:float):
+        #image =  image.convert("L")
         if confcoeff!=None or iou!=None:
             self.Kernel.conf = confcoeff
             self.Kernel.iou = iou
@@ -20,12 +21,21 @@ class modelIMGPIL():
             self.Kernel.conf = 0
             self.Kernel.iou = 0
         self.last_result =  self.Kernel([image], size=image_size)
+        print(type(self.last_result))        
 
     def _show_last_result(self):
         if self.last_result!= None:
             return self.last_result.render()[0]
         else:
             return None
+
+    
+    def last_result_data(self):
+        if self.last_result!= None:
+            return self.last_result
+        else:
+            return None
+
 
 class modelVideoCapture(): ## NEEDS TO CHANGE, IT DOESNT WORK
     Kernel:yolov5
