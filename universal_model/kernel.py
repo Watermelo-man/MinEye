@@ -1,22 +1,23 @@
 import torch
 import cv2
-import time
 import numpy 
-import torchvision.transforms.functional as F
+#mport torchvision.transforms.functional as F
 
 
 
 class kernel():
    kernel=None
-   def __init__(self, model_path = 'C:/Projects/orereco/ourmodels/yolov5x.pt', device:str = 'CUDA:0'):
-        self.kernel = torch.hub.load('./yolov5', 'custom', path = model_path, source='local',device=device)  # local repo
+   def __init__(self, model_path = 'C:/Users/Alexander/Desktop/orereco/ourmodels/yolov5n.pt', device:str = 'CPU'):
+        self.kernel = torch.hub.load('C:/Users/Alexander/Desktop/orereco/universal_model/yolov5', 'custom', path = model_path, source='local',device=device)  # local repo
 
 #kek = kernel()
 """
 ker = kernel()
 
 
-#im = cv2.cvtColor(cv2.imread("C:/Projects/orereco/source/0038.jpg"), cv2.COLOR_BGR2RGB)
+im = cv2.cvtColor(cv2.imread("C:/Users/Alexander/Desktop/orereco/source/bottle.jpg"), cv2.COLOR_BGR2RGB)
+
+print(type(im))
 
 cum = cv2.VideoCapture(0)
 
