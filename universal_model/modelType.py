@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod 
 from . import kernel
+#import kernel
 import cv2
 
 
@@ -35,8 +36,9 @@ class PictureModel(Imodel):
     last_result=None
     Kernel = None
 
-    def __init__(self, kernel:kernel):
-        self.Kernel=kernel.kernel
+    def __init__(self, kek:kernel.kernel.kernel):
+
+        self.Kernel=  kek
 
     def predict(self, ImageInput, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
         if isinstance(ImageInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
@@ -51,7 +53,7 @@ class PictureModel(Imodel):
         self.last_result = self.Kernel(ImageInput,size)
 
     def showLastShot(self):
-        return self.last_result.render()[0]
+        return cv2.cvtColor(self.last_result.render()[0], cv2.COLOR_BGR2RGB)
 
     def returnLastResult(self):
         return self.last_result
@@ -62,10 +64,11 @@ class VideoModel(Imodel):
     last_result=None
     Kernel = None
 
-    def __init__(self, kernel:kernel):
-        self.Kernel=kernel.kernel
+    def __init__(self, kek:kernel.kernel.kernel):
+        self.Kernel=kek
 
-    def predict(self, ViedoInput, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
+    def predict(self, VideoInput:cv2.VideoCapture, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
+
         """"
         #make check for cv camera
         if isinstance(ViedoInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
@@ -74,11 +77,16 @@ class VideoModel(Imodel):
         else:
             raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
         """
-        shot = ViedoInput.read()
+        self.Kernel.conf = confCoef
+        self.Kernel.iou = IoU
+        ret, shot = VideoInput.read()
+        
+        shot = cv2.cvtColor(shot, cv2.COLOR_BGR2RGB)
         self.last_result = self.Kernel(shot,size)
+      
 
     def showLastShot(self):
-        return self.last_result.render()[0]
+        return cv2.cvtColor(self.last_result.render()[0], cv2.COLOR_BGR2RGB)
 
     def returnLastResult(self):
         return self.last_result

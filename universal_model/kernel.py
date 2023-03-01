@@ -2,15 +2,16 @@ import torch
 import cv2
 import numpy 
 #mport torchvision.transforms.functional as F
+import pathlib
 
-
-
+yolodir = str(pathlib.Path.cwd())+'\\universal_model\\yolov5'
+print(yolodir)
 class kernel():
-   __kernel=None
-   def __init__(self, model_path = 'C:/Users/Alexander/Desktop/orereco/ourmodels/yolov5n.pt', device:str = 'CPU'):
-        self.__kernel = torch.hub.load('C:/Users/Alexander/Desktop/orereco/universal_model/yolov5', 'custom', path = model_path, source='local',device=device)  # local repo
-
-#kek = kernel()
+    kernel=None
+    def __init__(self, model_path = './orereco/ourmodels/yolov5n.pt', device:str = 'CPU'):
+        self.kernel = torch.hub.load(yolodir, 'custom', path = model_path, source='local',device=device)  # local repo
+    #def getkernel(self):
+     #   return self.__kernel
 
 
 

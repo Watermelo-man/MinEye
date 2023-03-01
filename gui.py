@@ -1,45 +1,47 @@
-from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QApplication, QMainWindow
 import sys
-
-    # caution: path[0] is reserved for script path (or '' in REPL)
-sys.path.insert(1, "C:/Projects/orereco/universal_model")
-
-#from  universal_model.universal_model import *
+import cv2
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel
+from PyQt5.QtGui import QPixmap, QImage
 
 
 
-# Только для доступа к аргументам командной строки
+class ImageWindow(QWidget):
+    def __init__(self, image):
+        super().__init__()
+        self.title = 'Image Viewer'
+        self.left = 10
+        self.top = 10
+        self.width = image.shape[1]
+        self.height = image.shape[0]
+        self.image = image
+        self.initUI()
 
-# Приложению нужен один (и только один) экземпляр QApplication.
-# Передаём sys.argv, чтобы разрешить аргументы командной строки для приложения.
-# Если не будете использовать аргументы командной строки, QApplication([]) тоже работает
+    def initUI(self):
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
 
+        label = QLabel(self)
+        pixmap = self.convert_cv2_to_pixmap(self.image)
+        label.setPixmap(pixmap)
+        label.move(0, 0)
+        self.show()
 
+    def convert_cv2_to_pixmap(self, image):
+        height, width, channel = image.shape
+        bytesPerLine = 3 * width
+        qImg = QImage(image.data, width, height, bytesPerLine, QImage.Format_RGB888)
+        return QPixmap.fromImage(qImg)
 
-#Kernel = kernel("ourmodels/onlygold.pt","cuda:0")
+if __name__ == '__main__':
+    # load the cv2 image
+    image = cv2.imread('C:\\Projects\\orereco\\source\\bottle.jpg')
 
+    # create the Qt application
+    app = QApplication(sys.argv)
 
+    # create and show the image window
+    window = ImageWindow(image)
+    window.show()
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super(MainWindow,self).__init__()
-        self.setGeometry(400,400,500,300)
-        #self.setWindowTitle("My App")
-        videowindow = QtWidgets.QLabel(self)
-        videowindow.setText("GUI application with PyQt6")
-        videowindow.show()
-
-
-
-
-app = QApplication(sys.argv)
-
-# Создаём виджет Qt — окно.
-window = MainWindow()
-window.show()  # Важно: окно по умолчанию скрыто.
-
-# Запускаем цикл событий.
-app.exec()
-
-
+    # run the Qt application
+    sys.exit(app.exec_())

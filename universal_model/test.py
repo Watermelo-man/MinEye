@@ -4,11 +4,9 @@ from PIL import Image
 
 # Model
 #model = torch.hub.load('ultralytics/yolov5', "custom",'C:\Projects\orereco\ourmodels\onlygold.pt')
-model = torch.hub.load('C:/Users/Alexander/Desktop/orereco/universal_model/yolov5', 'custom', path='C:/Users/Alexander/Desktop/orereco/ourmodels/yolov5n.pt', source='local')  # local repo
+model = torch.hub.load('C:\Projects\orereco\yolov5', 'custom', path='C:\Projects\orereco\ourmodels\onlygold.pt', source='local')  # local repo
 # Images
-imgs = Image.open('C:/Users/Alexander/Desktop/orereco/source/bottle.jpg')  # batch of images
-
-print(type(imgs))
+imgs = Image.open('C:/Projects/orereco/source/0038.jpg')  # batch of images
 
 # Inference
 results = model(imgs)
