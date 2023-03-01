@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
-import kernel
+from abc import ABC, abstractmethod 
+from . import kernel
 import cv2
 
 
@@ -84,8 +84,9 @@ class VideoModel(Imodel):
         return self.last_result
 
 
-model = kernel.kernel()
+#model = kernel.kernel()
 
+"""
 a = PictureModel(model)
 
 cum = cv2.VideoCapture(0)
@@ -107,3 +108,4 @@ cv2.imshow("kek",cv2.cvtColor(res.render()[0], cv2.COLOR_RGB2BGR))
 
 
 cv2.waitKey(0)
+"""

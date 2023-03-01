@@ -27,8 +27,10 @@ class MainWindow(QMainWindow):
         self.setGeometry(400,400,500,300)
         #self.setWindowTitle("My App")
         videowindow = QtWidgets.QLabel(self)
-        videowindow.setText("GUI application with PyQt5")
+        videowindow.setText("GUI application with PyQt6")
         videowindow.show()
+
+
 
 
 app = QApplication(sys.argv)
