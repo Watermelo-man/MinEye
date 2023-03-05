@@ -53,8 +53,8 @@ class PictureModel(Imodel):
         self.last_result = self.Kernel(ImageInput,size)
 
     def showLastShot(self):
-        return cv2.cvtColor(self.last_result.render()[0], cv2.COLOR_BGR2RGB)
-
+        #return cv2.cvtColor(self.last_result.render()[0], cv2.COLOR_BGR2RGB)
+        return self.last_result.render()[0]
     def returnLastResult(self):
         return self.last_result
         
@@ -81,7 +81,7 @@ class VideoModel(Imodel):
         self.Kernel.iou = IoU
         ret, shot = VideoInput.read()
         
-        shot = cv2.cvtColor(shot, cv2.COLOR_BGR2RGB)
+        #shot = cv2.cvtColor(shot, cv2.COLOR_BGR2RGB)
         self.last_result = self.Kernel(shot,size)
       
 

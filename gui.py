@@ -1,47 +1,72 @@
 import sys
 import cv2
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel
-from PyQt5.QtGui import QPixmap, QImage
+from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel , QMainWindow
+from PyQt6.QtGui import QPixmap, QImage
+from  control import *
 
 
-
-class ImageWindow(QWidget):
-    def __init__(self, image):
+class MainWindow(QMainWindow):
+    def __init__(self):
         super().__init__()
-        self.title = 'Image Viewer'
-        self.left = 10
-        self.top = 10
-        self.width = image.shape[1]
-        self.height = image.shape[0]
-        self.image = image
-        self.initUI()
+        #img = QPixmap("C:\\Users\\User\\Desktop\\orereco\\source\\0038.jpg") 
+        self.setWindowTitle("Orereco")
+        #self.setFixedSize(QSize(400, 300))
 
-    def initUI(self):
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
 
-        label = QLabel(self)
-        pixmap = self.convert_cv2_to_pixmap(self.image)
-        label.setPixmap(pixmap)
-        label.move(0, 0)
-        self.show()
+        labl = QLabel()
+        md.predict(im)
+        res= md.showLastShot()
+        #create from numpy Qpixmap
+        h,w,ch = res.shape
+        bytes_per_line = ch*w
+        convert_to_Qt_format = QImage(res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
+        #create from numpy Qpixmap
+            
+        labl.setPixmap(QPixmap.fromImage( convert_to_Qt_format).scaled(640,480))
 
-    def convert_cv2_to_pixmap(self, image):
-        height, width, channel = image.shape
-        bytesPerLine = 3 * width
-        qImg = QImage(image.data, width, height, bytesPerLine, QImage.Format_RGB888)
-        return QPixmap.fromImage(qImg)
+        #self.setCentralWidget(labl)
 
-if __name__ == '__main__':
-    # load the cv2 image
-    image = cv2.imread('C:\\Projects\\orereco\\source\\bottle.jpg')
 
-    # create the Qt application
-    app = QApplication(sys.argv)
+        self.setCentralWidget(labl)
+        labl.show()
 
-    # create and show the image window
-    window = ImageWindow(image)
-    window.show()
+        
+        
+app = QApplication(sys.argv)
 
-    # run the Qt application
-    sys.exit(app.exec_())
+window = MainWindow()
+window.show()
+
+app.exec()
+
+""""
+import sys
+
+from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
+
+
+# Подкласс QMainWindow для настройки главного окна приложения
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("My App")
+
+        button = QPushButton("Press Me!")
+
+        self.setFixedSize(QSize(400, 300))
+
+        # Устанавливаем центральный виджет Window.
+        self.setCentralWidget(button)
+
+
+app = QApplication(sys.argv)
+
+window = MainWindow()
+window.show()
+
+app.exec()
+
+"""

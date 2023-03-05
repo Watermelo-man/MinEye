@@ -6,11 +6,11 @@ from PIL import Image
 
 
 
-model = universal_model.kernel.kernel(model_path="C:\\Projects\\orereco\\ourmodels\\yolov5x.pt", device="CUDA:0")
+model = universal_model.kernel.kernel(model_path="C:\\Projects\\orereco\\ourmodels\\onlygold.pt", device="CUDA:0")
 
 #im = cv2.imread("C:\\Projects\\orereco\\source\\bottle.jpg")
 
-#im =Image.open("C:\\Projects\\orereco\\source\\0010.jpg")
+#im =Image.open("C:\\Projects\\orereco\\source\\0038.png")
 
 im = cv2.VideoCapture(0)
 
@@ -19,6 +19,8 @@ md = universal_model.modelType.VideoModel(model.kernel)
 
 
 print(type(im))
+
+'''
 while(True):
     
 
@@ -32,10 +34,11 @@ while(True):
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 #cv2.waitKey(0)
-
+'''
 
 """
 from universal_model import kernel
 from universal_model import modelType
+
 """
  
