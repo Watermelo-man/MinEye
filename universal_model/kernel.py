@@ -2,9 +2,15 @@ import torch
 import cv2
 import numpy 
 #mport torchvision.transforms.functional as F
-import pathlib
+#import pathlib
 
-yolodir = str(pathlib.Path.cwd())+'\\universal_model\\yolov5'
+import os
+rootdir = str(os.path.dirname(os.path.abspath(__file__)))
+#yolodir = str(pathlib.Path.cwd())+'\\yolov5'
+#yolodir = str(os.path.abspath("yolov5"))+'\\yolov5'
+
+yolodir = rootdir + "\\yolov5"
+
 print(yolodir)
 class kernel():
     kernel=None

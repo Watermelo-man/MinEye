@@ -27,7 +27,7 @@ while(True):
     res = md.showLastShot()
 
 
-    #cv2.imshow("lol",cv2.resize(res,[640,480]))#cv2.resize(res,[640,480]))
+    cv2.imshow("lol",cv2.resize(res,[640,480]))#cv2.resize(res,[640,480]))
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
