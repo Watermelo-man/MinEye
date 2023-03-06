@@ -4,6 +4,7 @@ import universal_model
 import cv2
 from PIL import Image
 from PyQt6.QtGui import QPixmap, QImage
+from PyQt6.QtWidgets import QFileDialog
 from enum import Enum
 
 class types(Enum):
@@ -17,7 +18,7 @@ class controller():
     kernel = None
     def __init__(self):
          self.kernel = universal_model.kernel.kernel(model_path="C:\\Users\\Alexander\\Desktop\\orereco\\ourmodels\\yolov5n.pt", device="CPU")
-    
+         
     def selectType(self,type:int):
         if type == 1:
             self.model = universal_model.modelType.models.selectModel(self.kernel.kernel, "PictureModel")
@@ -28,10 +29,11 @@ class controller():
         else:
             return -1
     
-    def selectSource(self,src:int):
+    def selectSource(self,src:int = 1):
         if src == 1:
-            self.source = Image.open("C:\\Users\\Alexander\\Desktop\\orereco\\source\\bottle.jpg")
-            print(type(self.source))
+            #self.source = Image.open("C:/Users/Alexander/Desktop/orereco/source/bottle.jpg")
+            path,check = QFileDialog.getOpenFileName(None, "Open Image","","Image Files (*.png *.jpg)")
+            self.source = Image.open(str(path))
             return 0
         elif src == 2:
             self.source ==cv2.VideoCapture(0)
@@ -40,6 +42,7 @@ class controller():
             return -1
     
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
+        print(self.source)
         self.model.predict(self.source)
         res= self.model.showLastShot()
         #create from numpy Qpixmap
@@ -52,7 +55,7 @@ class controller():
 
 cont = controller()
 cont.selectType(1)
-cont.selectSource(1)
+#cont.selectSource()
 
 
 
