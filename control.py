@@ -4,6 +4,11 @@ import universal_model
 import cv2
 from PIL import Image
 from PyQt6.QtGui import QPixmap, QImage
+from enum import Enum
+
+class types(Enum):
+    photo = 1
+    video = 2
 
 
 class controller():
