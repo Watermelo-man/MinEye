@@ -65,7 +65,6 @@ class VideoModel(Imodel):
         self.Kernel=ker
 
     def predict(self, VideoInput:cv2.VideoCapture, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
-
         """"
         #make check for cv camera
         if isinstance(ViedoInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
@@ -81,7 +80,6 @@ class VideoModel(Imodel):
         #shot = cv2.cvtColor(shot, cv2.COLOR_BGR2RGB)
         self.last_result = self.Kernel(shot,size)
       
-
     def showLastShot(self):
         return cv2.cvtColor(self.last_result.render()[0], cv2.COLOR_BGR2RGB)
 
@@ -91,9 +89,8 @@ class VideoModel(Imodel):
 
 
 class fabric():
-
     inputType = dict()
-   
+
     def __init__(self):
         pass
 

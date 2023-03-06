@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
         button.clicked.connect(self.the_button_was_clicked)
 
     def the_button_was_clicked(self):
-        im = analyseShot()
+        im = cont.analyseShot()
         self.img.setPixmap(QPixmap.fromImage(im).scaled(640,480))
         self.setCentralWidget(self.img)
 
