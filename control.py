@@ -1,28 +1,45 @@
 import sys
 from pathlib import Path
-import  universal_model 
+import universal_model 
 import cv2
 from PIL import Image
 from PyQt6.QtGui import QPixmap, QImage
 
 
-model = universal_model.kernel.kernel(model_path="C:\\Projects\\orereco\\ourmodels\\onlygold.pt", device="CUDA:0")
+
+
+kernel = universal_model.kernel.kernel(model_path="C:\\Users\\Alexander\\Desktop\\orereco\\ourmodels\\yolov5n.pt", device="CPU")
 
 #im = cv2.imread("C:\\Projects\\orereco\\source\\bottle.jpg")
 
-im =Image.open("C:\\Projects\\orereco\\source\\0038.png")
+
 
 #im = cv2.VideoCapture(0)
 
-md = universal_model.modelType.PictureModel(model.kernel)
-#md = universal_model.modelType.VideoModel(model.kernel)
+#md = universal_model.modelType.PictureModel(kernel.kernel)
+#md = universal_model.modelType.VideoModel(kernel.kernel)
 
 
-print(type(im))
 
 
-def analyseImg():
-    md.predict(im)
+def selectType(type:int):
+    if type == 1:
+        md = universal_model.modelType.models.selectModel(kernel.kernel, "PictureModel")
+        return md
+    elif type == 2:
+        md == universal_model.modelType.models.selectModel(kernel.kernel, "VideoModel")
+    else:
+        return -1
+    
+md = selectType(1)
+
+    
+im =Image.open("C:\\Users\\Alexander\\Desktop\\orereco\\source\\bottle.jpg")
+
+
+
+def analyseShot(model:universal_model.modelType.Imodel = md,im = im):
+    model.predict(im)
     res= md.showLastShot()
     #create from numpy Qpixmap
     h,w,ch = res.shape
@@ -30,6 +47,11 @@ def analyseImg():
     convert_to_Qt_format = QImage(res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
     #create from numpy Qpixmap
     return convert_to_Qt_format
+
+
+
+
+
 
 
 

@@ -26,9 +26,6 @@ class Imodel(ABC):
     @abstractmethod
     def returnLastResult(self):
         pass
-
-
-    
     
 
 class PictureModel(Imodel):
@@ -36,9 +33,9 @@ class PictureModel(Imodel):
     last_result=None
     Kernel = None
 
-    def __init__(self, kek:kernel.kernel.kernel):
+    def __init__(self, ker:kernel.kernel.kernel):
 
-        self.Kernel=  kek
+        self.Kernel=  ker
 
     def predict(self, ImageInput, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
         if isinstance(ImageInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
@@ -64,8 +61,8 @@ class VideoModel(Imodel):
     last_result=None
     Kernel = None
 
-    def __init__(self, kek:kernel.kernel.kernel):
-        self.Kernel=kek
+    def __init__(self, ker:kernel.kernel.kernel):
+        self.Kernel=ker
 
     def predict(self, VideoInput:cv2.VideoCapture, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
 
@@ -92,28 +89,25 @@ class VideoModel(Imodel):
         return self.last_result
 
 
-#model = kernel.kernel()
 
-"""
-a = PictureModel(model)
+class fabric():
 
-cum = cv2.VideoCapture(0)
+    inputType = dict()
+   
+    def __init__(self):
+        pass
 
-#im = cv2.cvtColor(cv2.imread("C:/Users/Alexander/Desktop/orereco/source/bottle.jpg"), cv2.COLOR_BGR2RGB)
+    def addType(self, typeStr:str, typeClass):
+         self.inputType.update({typeStr:typeClass})
+         print(self.inputType)
 
-#im = cv2.imread("C:/Users/Alexander/Desktop/orereco/source/bottle.jpg")
+    def selectModel(self, Kernel:kernel.kernel.kernel, type:str = "PictureModel"):
+        if self.inputType.get(type) is not None:    
+            return self.inputType[type](Kernel)  
+        else: 
+            print("Ty petooh")
+            return -1
 
-#cv2.imshow("input",im) 
-
-
-#im = PIL.Image.open('C:/Users/Alexander/Desktop/orereco/source/bottle.jpg') 
-im = 15
-print(type(im))
-
-a.predict(im)
-res = a.returnLastResult()
-cv2.imshow("kek",cv2.cvtColor(res.render()[0], cv2.COLOR_RGB2BGR))
-
-
-cv2.waitKey(0)
-"""
+models = fabric()
+models.addType("PictureModel",PictureModel)
+models.addType("VideoModel",VideoModel)
