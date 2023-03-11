@@ -17,7 +17,7 @@ class controller():
     source = None
     kernel = None
     def __init__(self):
-         self.kernel = universal_model.kernel.kernel(model_path="C:\\Users\\Alexander\\Desktop\\orereco\\ourmodels\\yolov5n.pt", device="CPU")
+         self.kernel = universal_model.kernel.kernel(model_path=r"C:\Users\Acer\Desktop\orereco\orereco\ourmodels\yolov5n.pt", device="CPU")
          
     def selectType(self,type:int):
         if type == 1:
