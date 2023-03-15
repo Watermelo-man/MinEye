@@ -24,7 +24,7 @@ class controller():
             self.model = universal_model.modelType.models.selectModel(self.kernel.kernel, "PictureModel")
             return 0
         elif type == 2:
-            self.model == universal_model.modelType.models.selectModel(self.kernel.kernel, "VideoModel")
+            self.model = universal_model.modelType.models.selectModel(self.kernel.kernel, "VideoModel")
             return 0
         else:
             return -1
@@ -36,13 +36,13 @@ class controller():
             self.source = Image.open(str(path))
             return 0
         elif src == 2:
-            self.source ==cv2.VideoCapture(0)
+            self.source = cv2.VideoCapture(0)
             return 0
         else:
             return -1
     
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
-        print(self.source)
+        
         self.model.predict(self.source)
         res= self.model.showLastShot()
         #create from numpy Qpixmap
