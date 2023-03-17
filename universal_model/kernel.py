@@ -14,7 +14,7 @@ print(yolodir)
 class kernel():
     kernel=None
     def __init__(self, model_path = './orereco/ourmodels/yolov5n.pt', device:str = 'CPU'):
-        self.kernel = torch.hub.load(yolodir, 'custom', path = model_path, source='local',device=device)  # local repo
+        self.kernel = torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True).cuda() # local repo
     #def getkernel(self):
      #   return self.__kernel
 

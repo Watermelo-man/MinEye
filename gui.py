@@ -1,8 +1,5 @@
 import os
-import cv2
-import time
 from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtCore import QThread, pyqtSignal
 from control import *
 
 
@@ -200,7 +197,7 @@ class Ui_MainWindow(object):
                                       "gridline-color: rgb(0, 0, 0);")
         self.camera_on.setObjectName("camera_on")
 
-
+        #Turn off camera
         self.camera_off = QtWidgets.QPushButton(parent=self.centralwidget)
         self.camera_off.setGeometry(QtCore.QRect(1050, 570, 200, 41))
         font = QtGui.QFont()
@@ -246,95 +243,3 @@ class Ui_MainWindow(object):
         self.calc_obj_size_btn.setText(_translate("MainWindow", "Calculate size of objects"))
         self.camera_on.setText(_translate("MainWindow", "Switch the camera on"))
         self.camera_off.setText(_translate("MainWindow", "Switch the camera off"))
-
-
-#Separate image processing stream from the camera
-class ThreadOpenCV(QThread):
-    changePixmap = pyqtSignal(QImage)
-
-    def __init__(self):
-        super().__init__()
-        self.status = True
-
-    def run(self):
-        self.cont = controller()
-        self.cont.selectType(2)
-        self.cont.selectSource(2)
-
-        while self.status:
-            ret, frame = self.cont.source.read()
-            if ret:
-                self.changePixmap.emit(self.cont.analyseShot())
-                if cv2.waitKey(0) == ord('q'):
-                    break       
-            self.msleep(1)      
-            cv2.destroyAllWindows()
-
-
-class Window(QtWidgets.QMainWindow, Ui_MainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)            
-
-        #connections
-        self.pushButton.clicked.connect(self.start)
-        self.pushButton_2.clicked.connect(self.open)
-        self.camera_on.clicked.connect(self.can)
-        self.camera_off.clicked.connect(self.kill_thread)
-        self.thread = ThreadOpenCV()                                         
-        self.thread.changePixmap.connect(self.setImage)
-        
-        
-    #Open file function
-    def open(self):
-        try:
-            cont.selectSource()
-        except:
-            print("File didn't chosen")
-
-
-    #Start analysing function
-    def start(self):
-        try:
-            im = cont.analyseShot()
-            self.display.setPixmap(QPixmap.fromImage(im).scaled(800, 600))
-            self.display.show()
-        except:
-            error = QtWidgets.QMessageBox()
-            error.setWindowTitle("Error")
-            error.setText("You can use only PIL Image or cv2 ndarray")
-            error.setIcon(QtWidgets.QMessageBox.Icon.Warning)
-            error.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok|QtWidgets.QMessageBox.StandardButton.Cancel)
-            error.exec()             
-
-    #Threading start
-    def can(self):
-        try:
-            self.thread.start()
-        except:
-            error = QtWidgets.QMessageBox()
-            error.setWindowTitle("Error")
-            error.setText("Can't connect to the camera")
-            error.setIcon(QtWidgets.QMessageBox.Icon.Warning)
-            error.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok|QtWidgets.QMessageBox.StandardButton.Cancel)
-            error.exec()                                        
-
-    #Show camera's picture
-    def setImage(self, image):                                            
-        self.display.setPixmap(QPixmap.fromImage(image).scaled(800, 600))
-
-    #Switch camera off
-    def kill_thread(self):
-        print("Finishing...")
-        self.thread.cont.source.release()
-        cv2.destroyAllWindows()
-        self.status = False
-        time.sleep(1)
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    w = Window()
-    w.show()
-    sys.exit(app.exec())
