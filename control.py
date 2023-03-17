@@ -52,11 +52,11 @@ class controller():
     
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
         self.model.predict(self.source)
-        res = self.model.showLastShot()
+        self.res = self.model.showLastShot()
         #create from numpy Qpixmap
-        h,w,ch = res.shape
+        h,w,ch = self.res.shape
         bytes_per_line = ch*w
-        convert_to_Qt_format = QImage(res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
+        convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
         #create from numpy Qpixmap
         return convert_to_Qt_format
  

@@ -1,8 +1,7 @@
 
-from PyQt6.QtCore import QThread, pyqtSignal
+from PyQt6.QtCore import QThread, pyqtSignal, Qt
 import cv2
 from control import *
-from PyQt6.QtCore import Qt
 
 
 class ThreadOpenCVVideo(QThread):
@@ -17,16 +16,15 @@ class ThreadOpenCVVideo(QThread):
 
     def run(self):
         while self.status:
-            ret, frame = self.cont.source.read()
+            ret, frame = tuple(self.cont.source.read())
 
             if ret:
                 #self.changePixmap.emit(self.cont.analyseShot())
-                rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                h, w, ch = rgbImage.shape
+                self.cont.model.predict(self.cont.source)
+                self.res = self.cont.model.showLastShot()
+                #self.rgbImage = cv2.cvtColor(self.res, cv2.COLOR_BGR2RGB)
+                h, w, ch = self.res.shape
                 bytesPerLine = ch * w
-                convertToQtFormat = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format.Format_RGB888)
-                p = convertToQtFormat.scaled(800, 600, Qt.AspectRatioMode.KeepAspectRatio)
-                self.changePixmap.emit(p)
-
-            self.msleep(20)      
-            cv2.destroyAllWindows()
+                convertToQtFormat = QImage(self.res.data, w, h, bytesPerLine, QImage.Format.Format_RGB888)
+                # p = convertToQtFormat.scaled(800, 600, Qt.AspectRatioMode.KeepAspectRatio)
+                self.changePixmap.emit(convertToQtFormat)

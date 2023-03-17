@@ -68,8 +68,4 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
     #Switch camera off
     def kill_thread(self):
-        print("Finishing...")
-        self.thread_cam.cont.source.release()
-        cv2.destroyAllWindows()
-        self.status = False
-        time.sleep(1)
+        self.thread_cam.stop()
