@@ -13,13 +13,14 @@ class ThreadOpenCV(QThread):
 
 
     def run(self):
-        self.cont = controller()
+        #self.cont = controller()
+        self.cont = contInstance
         self.cont.selectSource(2)
 
         while self.status:
-            ret, frame = tuple(self.cont.source.read())
-            if ret:
-                self.changePixmap.emit(self.cont.analyseShot())
+            #ret, frame = tuple(self.cont.source.read())
+            #if ret:
+            self.changePixmap.emit(self.cont.analyseShot())
 
 
     def stop(self):
@@ -27,6 +28,6 @@ class ThreadOpenCV(QThread):
         self.cont.source.release()
         cv2.destroyAllWindows()
         self.status = False
-        self.quit()
+        #self.quit()
 
     

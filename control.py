@@ -6,6 +6,7 @@ from PIL import Image
 from PyQt6.QtGui import QPixmap, QImage
 from PyQt6.QtWidgets import QFileDialog
 from enum import Enum
+import os
 
 
 class types(Enum):
@@ -17,9 +18,9 @@ class controller():
     model = None
     source = None
     kernel = None
-    def __init__(self):
-         self.kernel = universal_model.kernel.kernel(model_path=r"C:\Users\Acer\Desktop\orereco\orereco\ourmodels\yolov5n.pt", device="CPU")
-
+    def __init__(self,pth:str):
+        #self.kernel = universal_model.kernel.kernel(model_path=r"C:\Projects\orereco\ourmodels\yolov5x.pt", device="CPU")
+        self.kernel = universal_model.kernel.kernel(model_path=pth, device="CPU")
          
     def selectType(self,type:int):
         if type == 1:
@@ -59,4 +60,34 @@ class controller():
         convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
         #create from numpy Qpixmap
         return convert_to_Qt_format
- 
+    
+
+pth = os.path.join(str(os.path.dirname(os.path.abspath(__file__))) , "ourmodels")
+
+pthall = os.path.join(pth,"yolov5x.pt")
+
+
+def createContInstance(pth:str):
+    global pthall
+    print(pth)
+    #contInstance = controller(pth)
+    #print(contInstance)
+    pthall = pth
+
+
+contInstance = controller(pthall)
+'''
+pth = os.path.join(str(os.path.dirname(os.path.abspath(__file__))) , "ourmodels")
+
+pthall = os.path.join(pth,"yolov5x.pt")
+
+
+contInstance  = controller( pthall)
+
+
+def createContInstance(pth:str):
+    global contInstance
+    print(pth)
+    contInstance = controller(pth)
+    print(contInstance)
+'''

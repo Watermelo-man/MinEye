@@ -3,7 +3,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from control import *
 
 
-path = r'C:\Users\Acer\Desktop\orereco\orereco\ourmodels' # Path to folder with models
+path = r'C:\Projects\orereco\ourmodels' # Path to folder with models
 
 
 class Ui_MainWindow(object):
@@ -62,7 +62,9 @@ class Ui_MainWindow(object):
         self.comboBox.setObjectName("comboBox")
         for pt_file in os.listdir(path):
             if pt_file.endswith(".pt"):
+                self.comboBox.blockSignals(True)
                 self.comboBox.addItem(pt_file)
+                self.comboBox.blockSignals(False)
 
 
         #Select file button

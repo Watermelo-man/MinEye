@@ -1,7 +1,7 @@
 from gui import *
 from threads import ThreadOpenCV, ThreadOpenCVVideo
 import time
-
+import os
 
 class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -17,12 +17,16 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         self.thread_cam.changePixmap.connect(self.setImage)
         self.thread_vid = ThreadOpenCVVideo()
         self.thread_vid.changePixmap.connect(self.setImage)
+       # self.comboBox.currentText
 
+        self.comboBox.currentIndexChanged.connect(lambda : \
+                                                  createContInstance(os.path.join(path, self.comboBox.currentText())))
+        
 
     #Open file function
     def open(self):
         try:
-            self.cont = controller()
+            self.cont = contInstance
             self.cont.selectSource(1)
         except:
             print("File didn't chosen")
