@@ -1,11 +1,13 @@
 from PyQt6.QtCore import QThread, pyqtSignal
 from control import *
+import sys
+from control import cont
 
 
 #Separate image processing stream from the camera
 class ThreadOpenCV(QThread):
     changePixmap = pyqtSignal(QImage)
-    __slots__ = 'status', "cont",
+
 
     def __init__(self):
         super().__init__()
@@ -13,20 +15,19 @@ class ThreadOpenCV(QThread):
 
 
     def run(self):
-        self.cont = controller()
-        self.cont.selectSource(2)
-
-        while self.status:
-            ret, frame = tuple(self.cont.source.read())
-            if ret:
-                self.changePixmap.emit(self.cont.analyseShot())
+        try:
+            while self.status:
+                ret, frame = tuple(cont.source.read())
+                if ret:
+                    self.changePixmap.emit(cont.analyseShot())
+        except AttributeError as ex:
+            print(ex)
 
 
     def stop(self):
-        print("Finishing camera's image analysing...")
-        self.cont.source.release()
-        cv2.destroyAllWindows()
         self.status = False
+        cont.source.release()
+        cv2.destroyAllWindows()
         self.quit()
 
     

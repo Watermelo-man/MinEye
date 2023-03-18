@@ -1,9 +1,8 @@
-import sys
 from pathlib import Path
 import universal_model 
 import cv2
 from PIL import Image
-from PyQt6.QtGui import QPixmap, QImage
+from PyQt6.QtGui import QImage
 from PyQt6.QtWidgets import QFileDialog
 from enum import Enum
 
@@ -17,6 +16,7 @@ class controller():
     model = None
     source = None
     kernel = None
+    
     def __init__(self):
          self.kernel = universal_model.kernel.kernel(model_path=r"C:\Users\Acer\Desktop\orereco\orereco\ourmodels\yolov5n.pt", device="CPU")
 
@@ -44,7 +44,7 @@ class controller():
             return 0
         elif src == 2:
             self.selectType(2)
-            self.source = cv2.VideoCapture(0)
+            self.source = cv2.VideoCapture(0, cv2.CAP_DSHOW)
             return 0
         else:
             return -1
@@ -53,10 +53,11 @@ class controller():
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
         self.model.predict(self.source)
         self.res = self.model.showLastShot()
-        #create from numpy Qpixmap
         h,w,ch = self.res.shape
         bytes_per_line = ch*w
         convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
-        #create from numpy Qpixmap
         return convert_to_Qt_format
+    
+
+cont = controller()
  

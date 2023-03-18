@@ -209,6 +209,7 @@ class Ui_MainWindow(object):
         self.camera_off.setStyleSheet("background-color: rgb(126, 126, 126);\n"
                                       "selection-background-color: rgb(0, 0, 0);\n"
                                       "gridline-color: rgb(0, 0, 0);")
+        self.camera_off.setEnabled(False)
         self.camera_off.setObjectName("camera_off")
 
         
