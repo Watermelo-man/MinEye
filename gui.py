@@ -56,6 +56,23 @@ class Ui_MainWindow():
         self.StartButton.setObjectName("pushButton")
 
 
+
+        #Pause button
+        self.pause = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.pause.setGeometry(QtCore.QRect(830, 630, 100, 60))
+        font = QtGui.QFont()
+        font.setFamily("HelveticaNowDisplay Bold")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pause.setFont(font)
+        self.pause.setStyleSheet("background-color: rgb(126, 126, 126);\n"
+                                      "selection-background-color: rgb(0, 0, 0);\n"
+                                      "gridline-color: rgb(0, 0, 0);")
+        self.pause.setEnabled(False)
+        self.pause.setObjectName("pushButton")
+
+
         #Panel with model and file
         self.FileModelPanel = QtWidgets.QLabel(parent=self.centralwidget)
         self.FileModelPanel.setGeometry(QtCore.QRect(20, 630, 680, 60))

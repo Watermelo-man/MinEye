@@ -7,10 +7,6 @@ from PyQt6.QtGui import QPixmap, QImage
 from PyQt6.QtWidgets import QFileDialog
 from enum import Enum
 import os
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 
 class types(Enum):
     photo = 1
@@ -21,11 +17,6 @@ class controller():
     model = None
     source = None
     kernel = None
-<<<<<<< Updated upstream
-    def __init__(self,pth:str):
-        #self.kernel = universal_model.kernel.kernel(model_path=r"C:\Projects\orereco\ourmodels\yolov5x.pt", device="CPU")
-        self.kernel = universal_model.kernel.kernel(model_path=pth, device="CPU")
-=======
     __currentType = types.photo
 
     __modelpth = str(os.path.dirname(os.path.abspath(__file__)))
@@ -39,7 +30,6 @@ class controller():
     def __init__(self):
          self.kernel = universal_model.kernel.kernel(model_path=self.__modelpth, device="CUDA:0")
 
->>>>>>> Stashed changes
          
     def changeModelPath(self,pth:str)->None:
         self.__modelpth = pth
@@ -73,12 +63,8 @@ class controller():
             return 0
         elif src == 2:
             self.selectType(2)
-<<<<<<< Updated upstream
-            self.source = cv2.VideoCapture(0)
-=======
             self.source = cv2.VideoCapture(0, cv2.CAP_DSHOW)
             self.__currentType = 2
->>>>>>> Stashed changes
             return 0
         else:
             return -1
@@ -95,32 +81,7 @@ class controller():
         return convert_to_Qt_format
     
 
-pth = os.path.join(str(os.path.dirname(os.path.abspath(__file__))) , "ourmodels")
-
-pthall = os.path.join(pth,"yolov5x.pt")
 
 
-def createContInstance(pth:str):
-    global pthall
-    print(pth)
-    #contInstance = controller(pth)
-    #print(contInstance)
-    pthall = pth
 
-
-contInstance = controller(pthall)
-'''
-pth = os.path.join(str(os.path.dirname(os.path.abspath(__file__))) , "ourmodels")
-
-pthall = os.path.join(pth,"yolov5x.pt")
-
-
-contInstance  = controller( pthall)
-
-
-def createContInstance(pth:str):
-    global contInstance
-    print(pth)
-    contInstance = controller(pth)
-    print(contInstance)
-'''
+cont = controller()

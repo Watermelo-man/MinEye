@@ -7,14 +7,9 @@ import numpy
 import os
 rootdir = str(os.path.dirname(os.path.abspath(__file__)))
 
-<<<<<<< Updated upstream
-
-yolodir = rootdir + "\\yolov5"
-=======
 #yolodir = rootdir + "\\yolov5"
 
 yolodir = os.path.join(rootdir,'yolov5')
->>>>>>> Stashed changes
 
 print(yolodir)
 class kernel():
