@@ -5,10 +5,6 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from control import *
 
 
-<<<<<<< Updated upstream
-path = r'C:\Projects\orereco\ourmodels' # Path to folder with models
-=======
->>>>>>> Stashed changes
 
 
 rootdir = str(os.path.dirname(os.path.abspath(__file__)))
@@ -83,13 +79,7 @@ class Ui_MainWindow():
         #self.SelectModelButton.setObjectName("SelectModelBox")
         for pt_file in os.listdir(path):
             if pt_file.endswith(".pt"):
-<<<<<<< Updated upstream
-                self.comboBox.blockSignals(True)
-                self.comboBox.addItem(pt_file)
-                self.comboBox.blockSignals(False)
-=======
                 self.SelectModelBox.addItem(pt_file)
->>>>>>> Stashed changes
 
 
         #Select file button
@@ -260,16 +250,10 @@ class Ui_MainWindow():
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Orereco"))
-<<<<<<< Updated upstream
-        self.pushButton.setText(_translate("MainWindow", "START"))
-        self.label.setText(_translate("MainWindow", "          Select Model:"))
-        self.pushButton_2.setText(_translate("MainWindow", "Select File"))
-=======
         self.StartButton.setText(_translate("MainWindow", "START"))
         self.pause.setText(_translate("MainWindow", "PAUSE"))
         self.FileModelPanel.setText(_translate("MainWindow", "Select Model:"))
         self.SelectFileButton.setText(_translate("MainWindow", "Select File"))
->>>>>>> Stashed changes
         self.contrast_big_label.setText(_translate("MainWindow", " Contrast"))
         self.sharpness_label.setText(_translate("MainWindow", " Sharpness"))
         self.accuracy_label.setText(_translate("MainWindow", " Accuracy"))
