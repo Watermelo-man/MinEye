@@ -102,7 +102,7 @@ class fabric():
         if self.inputType.get(type) is not None:    
             return self.inputType[type](Kernel)  
         else: 
-            print("Ty petooh")
+            #print("Ty petooh")
             return -1
 
 models = fabric()

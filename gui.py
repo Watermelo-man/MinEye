@@ -1,14 +1,35 @@
 import os
 from PyQt6 import QtCore, QtGui, QtWidgets
+
+
 from control import *
 
 
+<<<<<<< Updated upstream
 path = r'C:\Projects\orereco\ourmodels' # Path to folder with models
+=======
+>>>>>>> Stashed changes
 
 
-class Ui_MainWindow(object):
+rootdir = str(os.path.dirname(os.path.abspath(__file__)))
+
+path = os.path.join(rootdir,'ourmodels')#rootdir
+
+#path = r'C:\Projects\orereco\ourmodels' # Path to folder with models
+
+
+class Ui_MainWindow():
+    layout = None
+    #MainWindowInstance = None
+
+    def __init__(self) -> None:
+        self.layout = QtWidgets.QGridLayout()
+        #self.MainWindowInstance = MainWindow
+        pass
+    
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
+
+        MainWindow.setObjectName("Orereco")
         MainWindow.resize(1280, 720)
         MainWindow.setStyleSheet("background-color: rgb(91, 91, 91);")
 
@@ -25,61 +46,65 @@ class Ui_MainWindow(object):
 
 
         #Start button
-        self.pushButton = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(720, 630, 100, 60))
+        self.StartButton = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.StartButton.setGeometry(QtCore.QRect(720, 630, 100, 60))
         font = QtGui.QFont()
         font.setFamily("HelveticaNowDisplay Bold")
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
-        self.pushButton.setFont(font)
-        self.pushButton.setStyleSheet("background-color: rgb(126, 126, 126);\n"
+        self.StartButton.setFont(font)
+        self.StartButton.setStyleSheet("background-color: rgb(126, 126, 126);\n"
                                       "selection-background-color: rgb(0, 0, 0);\n"
                                       "gridline-color: rgb(0, 0, 0);")
-        self.pushButton.setObjectName("pushButton")
+        self.StartButton.setObjectName("pushButton")
 
 
         #Panel with model and file
-        self.label = QtWidgets.QLabel(parent=self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(20, 630, 680, 60))
+        self.FileModelPanel = QtWidgets.QLabel(parent=self.centralwidget)
+        self.FileModelPanel.setGeometry(QtCore.QRect(20, 630, 680, 60))
         font = QtGui.QFont()
         font.setFamily("HelveticaNowDisplay Bold")
         font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
-        self.label.setFont(font)
-        self.label.setStyleSheet("border-color: rgb(0, 0, 0);")
-        self.label.setFrameShape(QtWidgets.QFrame.Shape.Panel)
-        self.label.setLineWidth(1)
-        self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
-        self.label.setObjectName("label")
+        self.FileModelPanel.setFont(font)
+        self.FileModelPanel.setStyleSheet("border-color: rgb(0, 0, 0);")
+        self.FileModelPanel.setFrameShape(QtWidgets.QFrame.Shape.Panel)
+        self.FileModelPanel.setLineWidth(1)
+        self.FileModelPanel.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        #self.FileModelPanel.setObjectName("FileModelPanel")
 
 
         #Select model panel
-        self.comboBox = QtWidgets.QComboBox(parent=self.centralwidget)
-        self.comboBox.setGeometry(QtCore.QRect(150, 650, 400, 20))
-        self.comboBox.setStyleSheet("background-color: rgb(134, 134, 134);")
-        self.comboBox.setObjectName("comboBox")
+        self.SelectModelBox = QtWidgets.QComboBox(parent=self.centralwidget)
+        self.SelectModelBox.setGeometry(QtCore.QRect(150, 650, 400, 20))
+        self.SelectModelBox.setStyleSheet("background-color: rgb(134, 134, 134);")
+        #self.SelectModelButton.setObjectName("SelectModelBox")
         for pt_file in os.listdir(path):
             if pt_file.endswith(".pt"):
+<<<<<<< Updated upstream
                 self.comboBox.blockSignals(True)
                 self.comboBox.addItem(pt_file)
                 self.comboBox.blockSignals(False)
+=======
+                self.SelectModelBox.addItem(pt_file)
+>>>>>>> Stashed changes
 
 
         #Select file button
-        self.pushButton_2 = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(580, 650, 80, 25))
+        self.SelectFileButton = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.SelectFileButton.setGeometry(QtCore.QRect(580, 650, 80, 25))
         font = QtGui.QFont()
         font.setFamily("HelveticaNowDisplay Bold")
         font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
-        self.pushButton_2.setFont(font)
-        self.pushButton_2.setStyleSheet("background-color: rgb(126, 126, 126);\n"
+        self.SelectFileButton.setFont(font)
+        self.SelectFileButton.setStyleSheet("background-color: rgb(126, 126, 126);\n"
                                         "selection-background-color: rgb(0, 0, 0);\n"
                                         "gridline-color: rgb(0, 0, 0);")
-        self.pushButton_2.setObjectName("pushButton_2")
+        #self.SelectFileButton.setObjectName("SelectFileButton")
         MainWindow.setCentralWidget(self.centralwidget)
 
 
@@ -235,9 +260,16 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Orereco"))
+<<<<<<< Updated upstream
         self.pushButton.setText(_translate("MainWindow", "START"))
         self.label.setText(_translate("MainWindow", "          Select Model:"))
         self.pushButton_2.setText(_translate("MainWindow", "Select File"))
+=======
+        self.StartButton.setText(_translate("MainWindow", "START"))
+        self.pause.setText(_translate("MainWindow", "PAUSE"))
+        self.FileModelPanel.setText(_translate("MainWindow", "Select Model:"))
+        self.SelectFileButton.setText(_translate("MainWindow", "Select File"))
+>>>>>>> Stashed changes
         self.contrast_big_label.setText(_translate("MainWindow", " Contrast"))
         self.sharpness_label.setText(_translate("MainWindow", " Sharpness"))
         self.accuracy_label.setText(_translate("MainWindow", " Accuracy"))
