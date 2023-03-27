@@ -17,23 +17,27 @@ class controller():
     model = None
     source = None
     kernel = None
+
+
+    __computeDevice = "CPU"
+
     __currentType = types.photo
 
     __modelpth = str(os.path.dirname(os.path.abspath(__file__)))
 
     __modelpth = os.path.join(__modelpth,'ourmodels')
 
-    __modelpth = os.path.join(__modelpth,'yolov5x.pt')
+    __modelpth = os.path.join(__modelpth,'yolov5n.pt')
 
     #__modelpth = r"C:\Projects\orereco\ourmodels\yolov5x.pt"
 
     def __init__(self):
-         self.kernel = universal_model.kernel.kernel(model_path=self.__modelpth, device="CUDA:0")
+         self.kernel = universal_model.kernel.kernel(model_path=self.__modelpth, device=self.__computeDevice)
 
          
     def changeModelPath(self,pth:str)->None:
         self.__modelpth = pth
-        self.kernel = universal_model.kernel.kernel(model_path=self.__modelpth, device="CUDA:0")
+        self.kernel = universal_model.kernel.kernel(model_path=self.__modelpth, device=self.__computeDevice)
         self.selectType(self.__currentType)
 
 
