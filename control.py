@@ -19,7 +19,7 @@ class controller():
     kernel = None
 
 
-    __computeDevice = "CPU"
+    __computeDevice = "kek"
 
     __currentType = types.photo
 
@@ -32,12 +32,17 @@ class controller():
     #__modelpth = r"C:\Projects\orereco\ourmodels\yolov5x.pt"
 
     def __init__(self):
-         self.kernel = universal_model.kernel.kernel(model_path=self.__modelpth, device=self.__computeDevice)
+         self.kernel = universal_model.kernel.kernel(model_path=self.__modelpth)#, device=self.__computeDevice)
+
+
+    #def chooseComputeDevice():
+       # try:
+
 
          
     def changeModelPath(self,pth:str)->None:
         self.__modelpth = pth
-        self.kernel = universal_model.kernel.kernel(model_path=self.__modelpth, device=self.__computeDevice)
+        self.kernel = universal_model.kernel.kernel(model_path=self.__modelpth)#,device=self.__computeDevice)
         self.selectType(self.__currentType)
 
 

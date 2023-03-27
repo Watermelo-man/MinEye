@@ -15,9 +15,20 @@ print(yolodir)
 class kernel():
     __slots__ = "kernel",
     
-    def __init__(self, model_path = './orereco/ourmodels/yolov5n.pt', device:str = 'CPU'):
+    def __init__(self, model_path = './orereco/ourmodels/yolov5n.pt', auto:bool = True, device:str = 'cpu'):
         #self.kernel = torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True).cuda() # local repo
-        self.kernel = torch.hub.load(yolodir, 'custom', path = model_path, source='local',device=device)
+        #dev = torch.device('cuda:0')
+        #print(torch.cuda.is_available())
+        if auto:
+            if torch.cuda.is_available():
+                self.kernel = torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True).cuda()
+                print("CUDA MODE")
+            else:
+                self.kernel = torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True).cpu()   
+                print("CPU MODE")
+        #else:
+
+        #self.kernel = torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True)
     #def getkernel(self):
      #   return self.__kernel
 

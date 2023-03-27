@@ -9,9 +9,7 @@ from control import *
 
 rootdir = str(os.path.dirname(os.path.abspath(__file__)))
 
-path = os.path.join(rootdir,'ourmodels')#rootdir
-
-#path = r'C:\Projects\orereco\ourmodels' # Path to folder with models
+path = os.path.join(rootdir,'ourmodels')
 
 
 class Ui_MainWindow():
@@ -25,11 +23,9 @@ class Ui_MainWindow():
     
     def setupUi(self, MainWindow):
 
-        MainWindow.setObjectName("Orereco")
+        MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1280, 720)
         MainWindow.setStyleSheet("background-color: rgb(91, 91, 91);")
-
-
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
@@ -266,7 +262,7 @@ class Ui_MainWindow():
     #Rename elements on the interface
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Orereco"))
+        MainWindow.setWindowTitle(_translate("LolWindow", "Orereco"))
         self.StartButton.setText(_translate("MainWindow", "START"))
         self.pause.setText(_translate("MainWindow", "PAUSE"))
         self.FileModelPanel.setText(_translate("MainWindow", "Select Model:"))
