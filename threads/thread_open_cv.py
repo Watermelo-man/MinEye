@@ -12,12 +12,13 @@ class ThreadOpenCV(QThread):
     def __init__(self):
         super().__init__()
         self.status = True
-
+        #self.run()
 
     def run(self):
         try:
             while self.status:
                 self.changePixmap.emit(cont.analyseShot())
+                #print('hiiiiii')
         except AttributeError as ex:
             print(ex)
 

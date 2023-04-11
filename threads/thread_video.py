@@ -12,7 +12,7 @@ class ThreadOpenCVVideo(QThread):
         super().__init__()
         self.status = True
         self.recordStatus = 0
-
+        #self.run()
 
     def run(self):
         try:

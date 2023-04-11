@@ -38,6 +38,7 @@ class PictureModel(Imodel):
         self.Kernel=  ker
 
     def predict(self, ImageInput, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
+        #print("pic")
         if isinstance(ImageInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
             self.Kernel.conf = confCoef
             self.Kernel.iou = IoU
@@ -73,10 +74,12 @@ class VideoModel(Imodel):
         else:
             raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
         """
+        #print("vid")
         self.Kernel.conf = confCoef
         self.Kernel.iou = IoU
-        ret, shot = VideoInput.read()
         
+        ret, shot = VideoInput.read()
+        shot = cv2.cvtColor(shot, cv2.COLOR_BGR2RGB)
         #shot = cv2.cvtColor(shot, cv2.COLOR_BGR2RGB)
         self.last_result = self.Kernel(shot,size)
       

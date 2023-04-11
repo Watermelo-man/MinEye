@@ -44,12 +44,12 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             if Path(str(cont.path)).suffix in ['.mp4', '.flv', '.ts', '.mts', '.avi']:
                 if cont.source is not None:
-                    self.pushButton.clicked.disconnect(self.start)
-                    self.pushButton.setText("STOP")
+                    self.StartButton.clicked.disconnect(self.start)
+                    self.StartButton.setText("STOP")
                     self.thread_vid = ThreadOpenCVVideo()
                     self.thread_vid.changePixmap.connect(self.setImage)
                     self.thread_vid.start()
-                    self.pushButton.clicked.connect(self.stop_video)
+                    self.StartButton.clicked.connect(self.stop_video)
                     self.pause.setEnabled(True)
                     self.pause.clicked.connect(self.pause_video)
                 else:
@@ -74,9 +74,9 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.thread_vid.changePixmap.disconnect(self.setImage)
             del self.thread_vid
             cont.source = None
-            self.pushButton.clicked.disconnect(self.stop_video)
-            self.pushButton.clicked.connect(self.start)
-            self.pushButton.setText("START")
+            self.StartButton.clicked.disconnect(self.stop_video)
+            self.StartButton.clicked.connect(self.start)
+            self.StartButton.setText("START")
             self.pause.setEnabled(False)
         except AttributeError as ex:
             print(ex)
@@ -123,7 +123,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.thread_cam.start()
             self.camera_off.setEnabled(True)
             self.camera_on.setEnabled(False)
-            self.pushButton.setEnabled(False)
+            #self.pushButton.setEnabled(False)
         except:
             error = QtWidgets.QMessageBox()
             error.setWindowTitle("Error")
@@ -142,7 +142,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             cont.source = None
             self.camera_off.setEnabled(False)
             self.camera_on.setEnabled(True)
-            self.pushButton.setEnabled(True)
+            #self.pushButton.setEnabled(True)
         except AttributeError as ex:
             print(ex)
             error = QtWidgets.QMessageBox()
