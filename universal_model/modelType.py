@@ -42,19 +42,27 @@ class PictureModel(Imodel):
         if isinstance(ImageInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
             self.Kernel.conf = confCoef
             self.Kernel.iou = IoU
+            #ImageInput = ImageInput.convert("BGR")
+            #ImageInput.show()
+            #cv2.imshow(ImageInput)
+            #cv2.waitKey(0)
         elif isinstance(ImageInput, np.ndarray):
             self.Kernel.conf = confCoef
             self.Kernel.iou = IoU
-            ImageInput = cv2.cvtColor(ImageInput, cv2.COLOR_BGR2RGB)
+            #ImageInput = cv2.cvtColor(ImageInput, cv2.COLOR_BGR2RGB)
+            #cv2.imshow(ImageInput)
+            #v2.waitKey(0)
         else:
             raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
-        self.last_result = self.Kernel(ImageInput,size)
+        self.last_result = self.Kernel(ImageInput)#,size)
 
     def showLastShot(self):
-        #return cv2.cvtColor(self.last_result.render()[0], cv2.COLOR_BGR2RGB)
-        return self.last_result.render()[0]
+        return cv2.cvtColor(self.last_result[0].plot(), cv2.COLOR_BGR2RGB)
+        #return self.last_result[0].plot()#.boxes#render()[0]
     def returnLastResult(self):
-        return self.last_result
+        return cv2.cvtColor(self.last_result[0].plot(), cv2.COLOR_BGR2RGB)
+        #return cv2.cvtColor(self.last_result.render()[0], cv2.COLOR_BGR2RGB)
+        #return self.last_result
         
     
 class VideoModel(Imodel):
@@ -79,16 +87,25 @@ class VideoModel(Imodel):
         self.Kernel.iou = IoU
         
         ret, shot = VideoInput.read()
-        shot = cv2.cvtColor(shot, cv2.COLOR_BGR2RGB)
+        #shot = cv2.cvtColor(shot, cv2.COLOR_BGR2RGB) #lol kek
+        #cv2.imshow('lol',shot)
+        #PIL.imshow(shot)
+        #print(type(shot))
+        #cv2.waitKey(0)
         #shot = cv2.cvtColor(shot, cv2.COLOR_BGR2RGB)
-        self.last_result = self.Kernel(shot,size)
-      
+        self.last_result = self.Kernel(shot)#,size)
+        print(type(self.last_result))
+        #print(self.last_result)
+        
+
     def showLastShot(self):
-        return cv2.cvtColor(self.last_result.render()[0], cv2.COLOR_BGR2RGB)
+        #print(self.last_result)
+        return cv2.cvtColor(self.last_result[0].plot(), cv2.COLOR_BGR2RGB)
+        #return self.last_result[0].plot()
 
     def returnLastResult(self):
-        return self.last_result
-
+        return cv2.cvtColor(self.last_result[0].plot(), cv2.COLOR_BGR2RGB)
+        #return self.last_result[0].plot()
 
 
 class fabric():

@@ -27,7 +27,7 @@ class controller():
 
     __modelpth = os.path.join(__modelpth,'ourmodels')
 
-    __modelpth = os.path.join(__modelpth,'onlygold.pt')
+    __modelpth = os.path.join(__modelpth,'yolov8n.pt')
 
     #__modelpth = r"C:\Projects\orereco\ourmodels\yolov5x.pt"
 
@@ -87,8 +87,8 @@ class controller():
         #cv2.imshow("lol",self.res)
         #cv2.waitKey(0)
         #print(type(self.model))
-        if type(self.model)==universal_model.modelType.VideoModel:
-            self.res = cv2.cvtColor(self.res, cv2.COLOR_BGR2RGB)
+        #if type(self.model)==universal_model.modelType.VideoModel:
+        #    self.res = cv2.cvtColor(self.res, cv2.COLOR_BGR2RGB)
 
         #create from numpy Qpixmap
         h,w,ch = self.res.shape
