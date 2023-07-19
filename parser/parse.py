@@ -5,7 +5,9 @@ import re
 url = 'http://webmineral.com/data/index.html'
 
 proxies = {'http':'http://utmauth.ksrc.local:8080'}
-response = requests.get(url,proxies = proxies)
+#response = requests.get(url,proxies = proxies)
+response = requests.get(url)
+
 soup = BeautifulSoup(response.text, 'lxml')
 kek = []
 for link in soup.findAll('a'):
@@ -28,8 +30,12 @@ minlink = 'http://webmineral.com/data/' + kek2[a]
 #print(soup)
 
 
-mineral = requests.get(minlink,proxies = proxies)
+#mineral = requests.get(minlink,proxies = proxies)
+mineral = requests.get(minlink)
+
 mininst = BeautifulSoup(mineral.text, 'lxml')
+
+
 chem = mininst.find('b',string='Chemical  Formula: ')
 formula = str(list(chem.parent.parent.findAll('td'))[1]).replace('</td>','').replace('<td>','')
 
