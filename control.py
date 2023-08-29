@@ -7,7 +7,7 @@ from PyQt6.QtGui import QPixmap, QImage
 from PyQt6.QtWidgets import QFileDialog
 from enum import Enum
 import os
-
+from collections import Counter
 class types(Enum):
     photo = 1
     video = 2
@@ -100,7 +100,18 @@ class controller():
         return convert_to_Qt_format
     
 
-
-
-
+    def CountShot(self):
+            classes:dict = self.kernel.kernel.names
+            allkeys = classes.keys()
+            boxes = self.model.showLastResult()
+            clss = boxes[:, 5]
+            #print(classes)
+            #print(boxes)
+            
+            #print(classes) 
+            count = Counter(clss.long().tolist())
+            resultcounter = {str(k): v for k, v in count.items()}
+            new_dict = {classes[int(k)]: v for k, v in resultcounter.items()}
+            #print(new_dict)
+            return new_dict
 cont = controller()

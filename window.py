@@ -9,6 +9,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)           
 
         #connections
+        self.CountButton.clicked.connect(self.Count)
         self.StartButton.clicked.connect(self.start)
         self.SelectFileButton.clicked.connect(self.open)
         self.SelectModelBox.currentTextChanged.connect(self.changeModel)
@@ -30,7 +31,8 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     def open(self):
         try:
             cont.selectSource(1)
-        except:
+        except Exception as e:
+            print(e)
             error = QtWidgets.QMessageBox()
             error.setWindowTitle("Error")
             error.setText("You can use only images or videos.")
@@ -156,3 +158,20 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     #Show camera's picture
     def setImage(self, image):                                            
         self.display.setPixmap(QPixmap.fromImage(image).scaled(800, 600))
+
+
+    def Count(self):
+        mineralCntDict = cont.CountShot()
+        self.table.setRowCount(len(mineralCntDict))
+        
+        cnt = 0
+        for key, value in mineralCntDict.items():
+            item = QtWidgets.QTableWidgetItem(str(key))
+            self.table.setItem(cnt, 0, item)
+            item = QtWidgets.QTableWidgetItem(str(value))
+            self.table.setItem(cnt, 1, item)
+            cnt+=1
+
+        # for i, num in enumerate(mineralCntDict):
+        #     item = QtWidgets.QTableWidgetItem(str(num))
+        #     self.table.setItem(i, 0, item)

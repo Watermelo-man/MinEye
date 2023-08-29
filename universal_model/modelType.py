@@ -24,7 +24,7 @@ class Imodel(ABC):
         pass
 
     @abstractmethod
-    def returnLastResult(self):
+    def showLastResult(self):
         pass
     
 
@@ -40,18 +40,7 @@ class PictureModel(Imodel):
     def predict(self, ImageInput, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
         #print("pic")
         if isinstance(ImageInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
-            self.Kernel.conf = confCoef
-            self.Kernel.iou = IoU
-            #ImageInput = ImageInput.convert("BGR")
-            #ImageInput.show()
-            #cv2.imshow(ImageInput)
-            #cv2.waitKey(0)
-        elif isinstance(ImageInput, np.ndarray):
-            self.Kernel.conf = confCoef
-            self.Kernel.iou = IoU
-            #ImageInput = cv2.cvtColor(ImageInput, cv2.COLOR_BGR2RGB)
-            #cv2.imshow(ImageInput)
-            #v2.waitKey(0)
+            pass
         else:
             raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
         self.last_result = self.Kernel(ImageInput)#,size)
@@ -59,8 +48,9 @@ class PictureModel(Imodel):
     def showLastShot(self):
         return cv2.cvtColor(self.last_result[0].plot(), cv2.COLOR_BGR2RGB)
         #return self.last_result[0].plot()#.boxes#render()[0]
-    def returnLastResult(self):
-        return cv2.cvtColor(self.last_result[0].plot(), cv2.COLOR_BGR2RGB)
+    def showLastResult(self):
+        return self.last_result[0].boxes.data
+     
         #return cv2.cvtColor(self.last_result.render()[0], cv2.COLOR_BGR2RGB)
         #return self.last_result
         
@@ -82,29 +72,22 @@ class VideoModel(Imodel):
         else:
             raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
         """
-        #print("vid")
-        self.Kernel.conf = confCoef
-        self.Kernel.iou = IoU
+
+        #self.Kernel.conf = confCoef
+        #self.Kernel.iou = IoU
         
         ret, shot = VideoInput.read()
-        #shot = cv2.cvtColor(shot, cv2.COLOR_BGR2RGB) #lol kek
-        #cv2.imshow('lol',shot)
-        #PIL.imshow(shot)
-        #print(type(shot))
-        #cv2.waitKey(0)
-        #shot = cv2.cvtColor(shot, cv2.COLOR_BGR2RGB)
-        self.last_result = self.Kernel(shot)#,size)
-        print(type(self.last_result))
-        #print(self.last_result)
-        
+
+        self.last_result = self.Kernel(shot)
+
 
     def showLastShot(self):
         #print(self.last_result)
         return cv2.cvtColor(self.last_result[0].plot(), cv2.COLOR_BGR2RGB)
         #return self.last_result[0].plot()
 
-    def returnLastResult(self):
-        return cv2.cvtColor(self.last_result[0].plot(), cv2.COLOR_BGR2RGB)
+    def showLastResult(self):
+        return self.last_result[0].boxes.data
         #return self.last_result[0].plot()
 
 

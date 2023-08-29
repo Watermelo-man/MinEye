@@ -14,6 +14,7 @@ path = os.path.join(rootdir,'ourmodels')
 
 class Ui_MainWindow():
     layout = None
+    
     #MainWindowInstance = None
 
     def __init__(self) -> None:
@@ -51,6 +52,19 @@ class Ui_MainWindow():
                                       "gridline-color: rgb(0, 0, 0);")
         self.StartButton.setObjectName("pushButton")
 
+        #Count button
+        self.CountButton = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.CountButton.setGeometry(QtCore.QRect(940, 630, 100, 60))
+        font = QtGui.QFont()
+        font.setFamily("HelveticaNowDisplay Bold")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.CountButton.setFont(font)
+        self.CountButton.setStyleSheet("background-color: rgb(126, 126, 126);\n"
+                                      "selection-background-color: rgb(0, 0, 0);\n"
+                                      "gridline-color: rgb(0, 0, 0);")
+        self.CountButton.setObjectName("pushButton")
 
 
         #Pause button
@@ -181,7 +195,26 @@ class Ui_MainWindow():
         self.accuracy_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.accuracy_slider.setObjectName("accuracy_slider")
         MainWindow.setCentralWidget(self.centralwidget)
+        '''
+        self.label = QtWidgets.QLabel("GUI Applications with PyQt6", self)
+        self.label.setStyleSheet("background-color: rgb(105, 105, 105);")
+        self.label.move(840, 500)
+        '''
+        
+        self.table = QtWidgets.QTableWidget(self)
+        #table.move(840, 400)
+        self.table.setGeometry(QtCore.QRect(840, 400, 200, 150))
+        self.table.setRowCount(1)
+        #self.table.setRowCount(len(numbers))
+        self.table.setColumnCount(2)
+        self.table.setHorizontalHeaderLabels(['Minerals','Amount'])
+        self.table.setStyleSheet("background-color: rgb(105, 105, 105);")
 
+        '''
+        for i, num in enumerate(numbers):
+            item = QtWidgets.QTableWidgetItem(str(num))
+            self.table.setItem(i, 0, item)
+        '''
 
         #Calculate scale view button
         self.calc_scale_view_btn = QtWidgets.QPushButton(parent=self.centralwidget)
@@ -265,6 +298,7 @@ class Ui_MainWindow():
         MainWindow.setWindowTitle(_translate("LolWindow", "Orereco"))
         self.StartButton.setText(_translate("MainWindow", "START"))
         self.pause.setText(_translate("MainWindow", "PAUSE"))
+        self.CountButton.setText(_translate("MainWindow", "COUNT"))
         self.FileModelPanel.setText(_translate("MainWindow", "Select Model:"))
         self.SelectFileButton.setText(_translate("MainWindow", "Select File"))
         self.contrast_big_label.setText(_translate("MainWindow", " Contrast"))

@@ -4,12 +4,13 @@ import torch
 import numpy as np
 # Load a model
 model = YOLO('ourmodels/yolov8n-seg.pt')  # pretrained YOLOv8n model
-
+classes = model.names
+print(classes)
 # Run batched inference on a list of images
 results = model('source/bottle.jpg')  # return a list of Results objects
 
 
-print(model.names)
+#print(model.names)s
 
 
 for result in results:
@@ -18,6 +19,7 @@ for result in results:
     boxes = result.boxes.data
     # extract classes
     clss = boxes[:, 5]
+    print (clss)
     # get indices of results where class is 0 (people in COCO)
     people_indices = torch.where(clss == 39)
     # use these indices to extract the relevant masks
@@ -26,7 +28,7 @@ for result in results:
     people_mask = torch.any(people_masks, dim=0).int() * 255
     # save to file
     lol = people_mask.cpu().numpy().astype('uint8')
-    print(people_mask.cpu().numpy().astype('uint8'))
+    #print(people_mask.cpu().numpy().astype('uint8'))
     cnt = 0
     cntb = 0
     for row in lol:
@@ -39,6 +41,7 @@ for result in results:
     print(cntb)
     #cv2.imwrite(str(model.predictor.save_dir / 'merged_segs.jpg'), people_mask.cpu().numpy())
     cv2.imshow('pidor',lol)
+    #cv2.imshow('pidor2',results)
     cv2.waitKey(0)
     '''
 # Process results list
