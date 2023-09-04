@@ -10,7 +10,9 @@ print(classes)
 results = model('source/bottle.jpg')  # return a list of Results objects
 
 image = cv2.imread('source/bottle.jpg')
-
+height, width, channels = image.shape
+print(height,width)
+print()
 cv2.imshow('huila',image)
 #print(model.names)s
 
@@ -30,14 +32,15 @@ for result in results:
     people_masks = masks[people_indices]
     print(type(people_masks))
         # scale for visualizing results
-    #people_mask = torch.any(people_masks,dim = 0).int() * 255
+    people_mask = torch.any(people_masks,dim = 0).int() * 255
 
-    people_mask =  people_masks.cpu().numpy()
+    #people_mask =  people_masks.cpu().numpy()
     # save to file
-    lol = people_mask#people_mask.cpu().numpy().astype('uint8')
-    cv2.imshow('kekoch',lol)
-    cv2.waitKey(0)
-    '''
+    lol = people_mask.cpu().numpy().astype('uint8')
+    lol = cv2.resize(lol,(width,height))
+   # cv2.imshow('kekoch',resized)
+   # cv2.waitKey(0)
+    
     #print(people_mask.cpu().numpy().astype('uint8'))
     cnt = 0
     cntb = 0
@@ -49,9 +52,9 @@ for result in results:
                 cntb += 1
     print(cnt)
     print(cntb)
-    print(len(lol))
-    print(len(lol[0]))
-    print(sum(sum(lol)))
+    #print(len(lol))
+    #print(len(lol[0]))
+    #print(sum(sum(lol)))
     #cv2.imwrite(str(model.predictor.save_dir / 'merged_segs.jpg'), people_mask.cpu().numpy())
     cv2.imshow('pidor',lol)
     #cv2.imshow('pidor2',results)
@@ -67,4 +70,3 @@ print(masks)
 res_plotted = results[0].plot()
 cv2.imshow("result", res_plotted)
 cv2.waitKey(0)
-'''

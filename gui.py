@@ -200,21 +200,33 @@ class Ui_MainWindow():
         self.label.setStyleSheet("background-color: rgb(105, 105, 105);")
         self.label.move(840, 500)
         '''
-        
-        self.table = QtWidgets.QTableWidget(self)
+        #Count table
+        self.count_table = QtWidgets.QTableWidget(self)
         #table.move(840, 400)
-        self.table.setGeometry(QtCore.QRect(840, 400, 200, 150))
-        self.table.setRowCount(1)
+        self.count_table.setGeometry(QtCore.QRect(840, 400, 200, 150))
+        self.count_table.setRowCount(1)
         #self.table.setRowCount(len(numbers))
-        self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(['Minerals','Amount'])
-        self.table.setStyleSheet("background-color: rgb(105, 105, 105);")
+        self.count_table.setColumnCount(2)
+        self.count_table.setHorizontalHeaderLabels(['Minerals','Amount'])
+        self.count_table.setStyleSheet("background-color: rgb(105, 105, 105);")
 
         '''
         for i, num in enumerate(numbers):
             item = QtWidgets.QTableWidgetItem(str(num))
             self.table.setItem(i, 0, item)
         '''
+
+        #Count table
+        self.size_table = QtWidgets.QTableWidget(self)
+        #table.move(840, 400)
+        self.size_table.setGeometry(QtCore.QRect(1050, 400, 200, 150))
+        self.size_table.setRowCount(1)
+        #self.table.setRowCount(len(numbers))
+        self.size_table.setColumnCount(2)
+        self.size_table.setHorizontalHeaderLabels(['Minerals','Size (px)'])
+        self.size_table.setStyleSheet("background-color: rgb(105, 105, 105);")
+        
+
 
         #Calculate scale view button
         self.calc_scale_view_btn = QtWidgets.QPushButton(parent=self.centralwidget)

@@ -8,6 +8,7 @@ from PyQt6.QtWidgets import QFileDialog
 from enum import Enum
 import os
 from collections import Counter
+
 class types(Enum):
     photo = 1
     video = 2
@@ -16,6 +17,8 @@ class types(Enum):
 class controller():
     model = None
     source = None
+    source_width = None
+    source_height = None
     kernel = None
 
 
@@ -82,6 +85,9 @@ class controller():
         
     
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
+        
+        height, width, channels = self.source.shape
+        print(height,width)
         self.model.predict(self.source)
         self.res = self.model.showLastShot()
         #cv2.imshow("lol",self.res)
@@ -102,8 +108,13 @@ class controller():
 
     def CountShot(self):
             classes:dict = self.kernel.kernel.names
+            new_dict = dict()
             allkeys = classes.keys()
-            boxes = self.model.showLastResult()
+            if self.model != None:
+                boxes = self.model.showLastResult()
+            else:
+                print('kek')
+                return new_dict
             clss = boxes[:, 5]
             #print(classes)
             #print(boxes)
