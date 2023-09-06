@@ -27,6 +27,9 @@ class Imodel(ABC):
     def showLastResult(self):
         pass
     
+    @abstractmethod
+    def showLastSizes(self):
+        pass
 
 class PictureModel(Imodel):
 
@@ -53,6 +56,8 @@ class PictureModel(Imodel):
      
         #return cv2.cvtColor(self.last_result.render()[0], cv2.COLOR_BGR2RGB)
         #return self.last_result
+    def showLastSizes(self):
+        return self.last_result[0].masks.data
         
     
 class VideoModel(Imodel):
@@ -89,6 +94,8 @@ class VideoModel(Imodel):
     def showLastResult(self):
         return self.last_result[0].boxes.data
         #return self.last_result[0].plot()
+    def showLastSizes(self):
+        return self.last_result[0].masks.data
 
 
 class fabric():

@@ -23,7 +23,7 @@ for result in results:
     boxes = result.boxes.data
     # extract classes
 
-    print(result.masks.data)
+    print( result.masks.data)
     clss = boxes[:, 5]
     print (clss)
     # get indices of results where class is 0 (people in COCO)

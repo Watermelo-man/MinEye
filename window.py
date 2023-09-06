@@ -162,6 +162,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def Count(self):
         mineralCntDict = cont.CountShot()
+        mineralSize = cont.CountSquare(mineralCntDict)
         self.count_table.setRowCount(len(mineralCntDict))
         
         cnt = 0
@@ -170,6 +171,16 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.count_table.setItem(cnt, 0, item)
             item = QtWidgets.QTableWidgetItem(str(value))
             self.count_table.setItem(cnt, 1, item)
+            cnt+=1
+
+
+        self.size_table.setRowCount(len(mineralCntDict))
+        cnt = 0
+        for key, value in mineralSize.items():
+            item = QtWidgets.QTableWidgetItem(str(key))
+            self.size_table.setItem(cnt, 0, item)
+            item = QtWidgets.QTableWidgetItem(str(value))
+            self.size_table.setItem(cnt, 1, item)
             cnt+=1
 
         # for i, num in enumerate(mineralCntDict):

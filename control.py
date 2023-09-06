@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import QFileDialog
 from enum import Enum
 import os
 from collections import Counter
-
+import torch
 class types(Enum):
     photo = 1
     video = 2
@@ -86,8 +86,8 @@ class controller():
     
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
         
-        height, width, channels = self.source.shape
-        print(height,width)
+        #height, width, channels = self.source.shape
+        #print(height,width)
         self.model.predict(self.source)
         self.res = self.model.showLastShot()
         #cv2.imshow("lol",self.res)
@@ -108,13 +108,15 @@ class controller():
 
     def CountShot(self):
             classes:dict = self.kernel.kernel.names
-            new_dict = dict()
+            #new_dict = dict()
             allkeys = classes.keys()
+            #print(allkeys)
+            print(classes)
             if self.model != None:
                 boxes = self.model.showLastResult()
             else:
                 print('kek')
-                return new_dict
+                return classes_count
             clss = boxes[:, 5]
             #print(classes)
             #print(boxes)
@@ -122,7 +124,41 @@ class controller():
             #print(classes) 
             count = Counter(clss.long().tolist())
             resultcounter = {str(k): v for k, v in count.items()}
-            new_dict = {classes[int(k)]: v for k, v in resultcounter.items()}
-            #print(new_dict)
-            return new_dict
+            classes_count = {classes[int(k)]: v for k, v in resultcounter.items()}
+
+
+            classes_size = {classes[int(k)]: v for k, v in resultcounter.items()}
+
+            print(classes_count)
+            return classes_count
+    
+
+    def CountSquare(self,classes_in_shot:dict):
+        classes:dict = self.kernel.kernel.names
+        #print(classes)
+        inv_classes = dict((v, k) for k, v in classes.items())
+        result = dict()
+        boxes = self.model.showLastResult()
+        masks = self.model.showLastSizes()
+        clss = boxes[:, 5]
+        exist_keys = list(classes_in_shot.keys())
+        for key in exist_keys:
+            item_indicies = torch.where(clss == inv_classes[key])
+            item_masks = masks[item_indicies]
+            item_mask = torch.any(item_masks,dim = 0).int() * 255
+            image_mask = item_mask.cpu().numpy().astype('uint8')
+            #cntw = 0
+            #cntb = 0
+            #for row in image_mask:
+            #    for pix in row:
+            #        if pix != 0:
+            #            cntw +=1
+            #        else:
+            #            cntb += 1
+            cntw = cv2.countNonZero(image_mask)
+            result[key] = cntw
+        return result
+        #print(classes.keys())
+        #people_indices = torch.where(clss == 0)
+        #print(masks)
 cont = controller()
