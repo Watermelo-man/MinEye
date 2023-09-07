@@ -52,19 +52,7 @@ class Ui_MainWindow():
                                       "gridline-color: rgb(0, 0, 0);")
         self.StartButton.setObjectName("pushButton")
 
-        #Count button
-        self.CountButton = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.CountButton.setGeometry(QtCore.QRect(940, 630, 100, 60))
-        font = QtGui.QFont()
-        font.setFamily("HelveticaNowDisplay Bold")
-        font.setPointSize(11)
-        font.setBold(True)
-        font.setWeight(75)
-        self.CountButton.setFont(font)
-        self.CountButton.setStyleSheet("background-color: rgb(126, 126, 126);\n"
-                                      "selection-background-color: rgb(0, 0, 0);\n"
-                                      "gridline-color: rgb(0, 0, 0);")
-        self.CountButton.setObjectName("pushButton")
+  
 
 
         #Pause button
@@ -309,8 +297,7 @@ class Ui_MainWindow():
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("LolWindow", "Orereco"))
         self.StartButton.setText(_translate("MainWindow", "START"))
-        self.pause.setText(_translate("MainWindow", "PAUSE"))
-        self.CountButton.setText(_translate("MainWindow", "COUNT"))
+        self.pause.setText(_translate("MainWindow", "PAUSE"))     
         self.FileModelPanel.setText(_translate("MainWindow", "Select Model:"))
         self.SelectFileButton.setText(_translate("MainWindow", "Select File"))
         self.contrast_big_label.setText(_translate("MainWindow", " Contrast"))

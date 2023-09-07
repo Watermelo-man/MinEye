@@ -9,7 +9,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)           
 
         #connections
-        self.CountButton.clicked.connect(self.Count)
+        self.calc_obj_size_btn.clicked.connect(self.Count)
         self.StartButton.clicked.connect(self.start)
         self.SelectFileButton.clicked.connect(self.open)
         self.SelectModelBox.currentTextChanged.connect(self.changeModel)
@@ -155,9 +155,11 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             error.exec()    
 
 
+
+
     #Show camera's picture
-    def setImage(self, image):                                            
-        self.display.setPixmap(QPixmap.fromImage(image).scaled(800, 600))
+    def setImage(self, image):       
+        self.display.setPixmap(QPixmap.fromImage(image))#.scaled(800, 600))
 
 
     def Count(self):

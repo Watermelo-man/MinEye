@@ -83,6 +83,8 @@ class controller():
         else:
             return -1
         
+    point1 = (100,100)
+    point2 = (200,200)    
     
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
         
@@ -95,6 +97,14 @@ class controller():
         #print(type(self.model))
         #if type(self.model)==universal_model.modelType.VideoModel:
         #    self.res = cv2.cvtColor(self.res, cv2.COLOR_BGR2RGB)
+        # if self.point1:
+        #     cv2.circle(self.res, self.point1, 5, (0, 255, 0), -1)
+        if self.point1 and self.point2:
+            cv2.circle(self.res, self.point1, 15, (0, 255, 0), -1)
+            cv2.circle(self.res, self.point2, 15, (0, 255, 0), -1)
+            cv2.line(self.res, self.point1, self.point2, (255, 0, 0), 10)
+        #cv2.circle(self.res, (10,10), 5, (0, 255, 0), -1)
+        #cv2.imshow('kek',self.res)
 
         #create from numpy Qpixmap
         h,w,ch = self.res.shape
@@ -102,7 +112,7 @@ class controller():
         convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
         #create from numpy Qpixmap
         #print("shot exist")
-        
+        #cv2.waitKey(0)
         return convert_to_Qt_format
     
 
@@ -127,7 +137,7 @@ class controller():
             classes_count = {classes[int(k)]: v for k, v in resultcounter.items()}
 
 
-            classes_size = {classes[int(k)]: v for k, v in resultcounter.items()}
+            #classes_size = {classes[int(k)]: v for k, v in resultcounter.items()}
 
             print(classes_count)
             return classes_count
@@ -147,18 +157,8 @@ class controller():
             item_masks = masks[item_indicies]
             item_mask = torch.any(item_masks,dim = 0).int() * 255
             image_mask = item_mask.cpu().numpy().astype('uint8')
-            #cntw = 0
-            #cntb = 0
-            #for row in image_mask:
-            #    for pix in row:
-            #        if pix != 0:
-            #            cntw +=1
-            #        else:
-            #            cntb += 1
             cntw = cv2.countNonZero(image_mask)
             result[key] = cntw
         return result
-        #print(classes.keys())
-        #people_indices = torch.where(clss == 0)
-        #print(masks)
+
 cont = controller()
