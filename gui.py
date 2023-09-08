@@ -96,6 +96,12 @@ class Ui_MainWindow():
             if pt_file.endswith(".pt"):
                 self.SelectModelBox.addItem(pt_file)
 
+        pathm = str(os.path.dirname(os.path.abspath(__file__)))
+        pathm = os.path.join(pathm,'ourmodels')
+        pathm = os.path.join(pathm,self.SelectModelBox.currentText())
+        #print(self.SelectModelBox.currentText)
+        cont.changeModelPath(pathm)
+
 
         #Select file button
         self.SelectFileButton = QtWidgets.QPushButton(parent=self.centralwidget)
