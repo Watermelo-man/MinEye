@@ -4,11 +4,19 @@ import time
 import os
 
 class Window(QtWidgets.QMainWindow, Ui_MainWindow):
+
+    _calibration = False
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)           
 
         #connections
+
+        self.display.mousePressEvent = self.get_mouse_coords
+
+
+        self.calc_scale_view_btn.clicked.connect(self.activate_points_mode)
         self.calc_obj_size_btn.clicked.connect(self.Count)
         self.StartButton.clicked.connect(self.start)
         self.SelectFileButton.clicked.connect(self.open)
@@ -54,6 +62,8 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.StartButton.clicked.connect(self.stop_video)
                     self.pause.setEnabled(True)
                     self.pause.clicked.connect(self.pause_video)
+
+                    
                 else:
                     raise AttributeError
             else:
@@ -162,6 +172,31 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         self.display.setPixmap(QPixmap.fromImage(image))#.scaled(800, 600))
 
 
+    def activate_points_mode(self):
+        self._calibration = not self._calibration
+        if not self._calibration:
+            cont.point1 = None
+            cont.point2 = None
+            self.setImage(cont.analyseShot())
+        #self.display.mousePressEvent = self.get_mouse_coords
+
+    def get_mouse_coords(self, event):
+        if self._calibration:
+            x, y = event.pos().x(), event.pos().y()
+            if not cont.point1:
+                cont.point1 = (x, y)
+                #cv2.circle(frame, self.point1, 5, (0, 255, 0), -1)
+            elif not cont.point2:
+                cont.point2 = (x, y)
+                #cv2.circle(frame, self.point2, 5, (0, 255, 0), -1)
+            else:
+                cont.point1, cont.point2 = (x, y), None
+            #self.setImage(cont.Calibrate())
+            if isinstance(cont.source,PIL.JpegImagePlugin.JpegImageFile) or isinstance(cont.source, PIL.PngImagePlugin.PngImageFile):
+                self.setImage(cont.analyseShot())
+                
+
+        
     def Count(self):
         mineralCntDict = cont.CountShot()
         mineralSize = cont.CountSquare(mineralCntDict)

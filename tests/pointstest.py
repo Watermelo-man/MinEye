@@ -6,6 +6,7 @@ from PyQt6.QtGui import QImage, QPixmap, QPainter, QPen
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel
 
 class App(QMainWindow):
+    ev = False
     def __init__(self):
         super().__init__()
         
@@ -22,7 +23,7 @@ class App(QMainWindow):
         self.display = QLabel(self)
         self.display.resize(640, 480)
         self.display.move(80, 50)
-
+        self.display.mousePressEvent = self.get_mouse_coords
         # Кнопка для активации режима точек
         self.btn = QPushButton('Activate Points Mode', self)
         self.btn.resize(200, 40)
@@ -39,18 +40,21 @@ class App(QMainWindow):
         self.point2 = None
 
     def activate_points_mode(self):
-        self.display.mousePressEvent = self.get_mouse_coords
+        #self.display.mousePressEvent = self.get_mouse_coords
+        self.ev = not self.ev
 
     def get_mouse_coords(self, event):
-        x, y = event.pos().x(), event.pos().y()
-        if not self.point1:
-            self.point1 = (x, y)
-            #cv2.circle(frame, self.point1, 5, (0, 255, 0), -1)
-        elif not self.point2:
-            self.point2 = (x, y)
-            #cv2.circle(frame, self.point2, 5, (0, 255, 0), -1)
-        else:
-            self.point1, self.point2 = (x, y), None
+        #super().mousePressEvent()
+        if self.ev:
+            x, y = event.pos().x(), event.pos().y()
+            if not self.point1:
+                self.point1 = (x, y)
+                #cv2.circle(frame, self.point1, 5, (0, 255, 0), -1)
+            elif not self.point2:
+                self.point2 = (x, y)
+                #cv2.circle(frame, self.point2, 5, (0, 255, 0), -1)
+            else:
+                self.point1, self.point2 = (x, y), None
 
     def update_frame(self):
         ret, frame = self.cap.read()

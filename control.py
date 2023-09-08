@@ -4,11 +4,15 @@ import universal_model
 import cv2
 from PIL import Image
 from PyQt6.QtGui import QPixmap, QImage
+from PyQt6 import QtCore
 from PyQt6.QtWidgets import QFileDialog
 from enum import Enum
 import os
 from collections import Counter
 import torch
+import PIL
+import numpy
+
 class types(Enum):
     photo = 1
     video = 2
@@ -83,63 +87,56 @@ class controller():
         else:
             return -1
         
-    point1 = (100,100)
-    point2 = (200,200)    
+    point1 = None
+    point2 = None    
     
+        
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
         
         #height, width, channels = self.source.shape
         #print(height,width)
+        if isinstance(self.source, PIL.JpegImagePlugin.JpegImageFile) or isinstance(self.source, PIL.PngImagePlugin.PngImageFile):
+            
+            shot = numpy.array(self.source)
+            # Convert RGB to BGR
+            shot = shot[:, :, ::-1].copy()
+        elif isinstance(self.source, cv2.VideoCapture):
+            ret, shot = self.source.read()
+        else:
+            shot = self.source
+
+
+        height, width, channels = shot.shape
+
+        #print(height, width)
         self.model.predict(self.source)
         self.res = self.model.showLastShot()
-        #cv2.imshow("lol",self.res)
-        #cv2.waitKey(0)
-        #print(type(self.model))
-        #if type(self.model)==universal_model.modelType.VideoModel:
-        #    self.res = cv2.cvtColor(self.res, cv2.COLOR_BGR2RGB)
-        # if self.point1:
-        #     cv2.circle(self.res, self.point1, 5, (0, 255, 0), -1)
+       
+        if self.point1:
+            cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(width/800))), 15, (0, 255, 0), -1)
         if self.point1 and self.point2:
-            cv2.circle(self.res, self.point1, 15, (0, 255, 0), -1)
-            cv2.circle(self.res, self.point2, 15, (0, 255, 0), -1)
-            cv2.line(self.res, self.point1, self.point2, (255, 0, 0), 10)
-        #cv2.circle(self.res, (10,10), 5, (0, 255, 0), -1)
-        #cv2.imshow('kek',self.res)
+            cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(width/800))), 15, (0, 255, 0), -1)
+            cv2.circle(self.res, (int(self.point2[0] * float(height/600)),int(self.point2[1] * float(height/600))), 15, (0, 255, 0), -1)
+            cv2.line(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(width/800))), (int(self.point2[0] * float(height/600)),int(self.point2[1] * float(height/600))), (255, 0, 0), 10)
 
-        #create from numpy Qpixmap
         h,w,ch = self.res.shape
         bytes_per_line = ch*w
-        convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
-        #create from numpy Qpixmap
-        #print("shot exist")
-        #cv2.waitKey(0)
+        convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888).scaled(800,600)#,QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+
         return convert_to_Qt_format
     
 
     def CountShot(self):
             classes:dict = self.kernel.kernel.names
-            #new_dict = dict()
-            allkeys = classes.keys()
-            #print(allkeys)
-            print(classes)
+            #allkeys = classes.keys()
             if self.model != None:
                 boxes = self.model.showLastResult()
             else:
-                print('kek')
                 return classes_count
             clss = boxes[:, 5]
-            #print(classes)
-            #print(boxes)
-            
-            #print(classes) 
             count = Counter(clss.long().tolist())
             resultcounter = {str(k): v for k, v in count.items()}
             classes_count = {classes[int(k)]: v for k, v in resultcounter.items()}
-
-
-            #classes_size = {classes[int(k)]: v for k, v in resultcounter.items()}
-
-            print(classes_count)
             return classes_count
     
 
