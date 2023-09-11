@@ -138,10 +138,11 @@ class controller():
             self.ypixlength = ((int(self.point3[0] * float(width/800)) - int(self.point2[0] * float(width/800)))**2 + (int(self.point3[1] * float(height/600)) - int(self.point2[1] * float(height/600)))**2 )**0.5
             
             self.onepixdim = self.scale_value/self.xpixlength * self.scale_value/self.ypixlength
-            
-            print(self.xpixlength)
-            print(self.ypixlength)
-            print(self.onepixdim)
+            # print(len(self.res))
+            # print(len(self.res[0]))
+            # print(self.xpixlength)
+            # print(self.ypixlength)
+            # #print(self.onepixdim)
         h,w,ch = self.res.shape
         bytes_per_line = ch*w
         convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888).scaled(800,600)#,QtCore.Qt.AspectRatioMode.KeepAspectRatio)
@@ -171,6 +172,9 @@ class controller():
         inv_classes = dict((v, k) for k, v in classes.items())
         result = dict()
         try:
+            pic = self.model.showLastShot()
+            width = len(pic[0])
+            height = len(pic)
             boxes = self.model.showLastResult()
             masks = self.model.showLastSizes()
         except:
@@ -179,15 +183,18 @@ class controller():
         if boxes!=None and masks!=None:
             clss = boxes[:, 5]
             exist_keys = list(classes_in_shot.keys())
+
             for key in exist_keys:
                 item_indicies = torch.where(clss == inv_classes[key])
                 item_masks = masks[item_indicies]
                 item_mask = torch.any(item_masks,dim = 0).int() * 255
                 image_mask = item_mask.cpu().numpy().astype('uint8')
+                image_mask = cv2.resize(image_mask,(width,height))
                 #cv2.imshow(image_mask)
                 #cv2.waitKey(0)
                 print(len(image_mask))
                 print(len(image_mask[0]))
+
                 cntw = cv2.countNonZero(image_mask)
                 if self.onepixdim == 0:
                     result[key] = cntw
