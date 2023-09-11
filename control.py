@@ -105,9 +105,13 @@ class controller():
         else:
             shot = self.source
 
-
-        height, width, channels = shot.shape
-
+        try:
+            height, width, channels = shot.shape
+        except:
+            print('No image/video found')
+            black = QImage()
+            black.fill(QtCore.Qt.GlobalColor.black)
+            return black
         #print(height, width)
         self.model.predict(self.source)
         self.res = self.model.showLastShot()
@@ -132,30 +136,39 @@ class controller():
             if self.model != None:
                 boxes = self.model.showLastResult()
             else:
+                return None
+            if boxes != None:
+                clss = boxes[:, 5]
+                count = Counter(clss.long().tolist())
+                resultcounter = {str(k): v for k, v in count.items()}
+                classes_count = {classes[int(k)]: v for k, v in resultcounter.items()}
                 return classes_count
-            clss = boxes[:, 5]
-            count = Counter(clss.long().tolist())
-            resultcounter = {str(k): v for k, v in count.items()}
-            classes_count = {classes[int(k)]: v for k, v in resultcounter.items()}
-            return classes_count
-    
+            else:
+                return None
 
     def CountSquare(self,classes_in_shot:dict):
         classes:dict = self.kernel.kernel.names
         #print(classes)
         inv_classes = dict((v, k) for k, v in classes.items())
         result = dict()
-        boxes = self.model.showLastResult()
-        masks = self.model.showLastSizes()
-        clss = boxes[:, 5]
-        exist_keys = list(classes_in_shot.keys())
-        for key in exist_keys:
-            item_indicies = torch.where(clss == inv_classes[key])
-            item_masks = masks[item_indicies]
-            item_mask = torch.any(item_masks,dim = 0).int() * 255
-            image_mask = item_mask.cpu().numpy().astype('uint8')
-            cntw = cv2.countNonZero(image_mask)
-            result[key] = cntw
-        return result
-
+        try:
+            boxes = self.model.showLastResult()
+            masks = self.model.showLastSizes()
+        except:
+            print('No model found')
+            return None
+        if boxes!=None and masks!=None:
+            clss = boxes[:, 5]
+            exist_keys = list(classes_in_shot.keys())
+            for key in exist_keys:
+                item_indicies = torch.where(clss == inv_classes[key])
+                item_masks = masks[item_indicies]
+                item_mask = torch.any(item_masks,dim = 0).int() * 255
+                image_mask = item_mask.cpu().numpy().astype('uint8')
+                cntw = cv2.countNonZero(image_mask)
+                result[key] = cntw
+            return result
+        else:
+            print('No masks or boxes found')
+            return None
 cont = controller()

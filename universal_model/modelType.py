@@ -52,14 +52,23 @@ class PictureModel(Imodel):
         return cv2.cvtColor(self.last_result[0].plot(), cv2.COLOR_BGR2RGB)
         #return self.last_result[0].plot()#.boxes#render()[0]
     def showLastResult(self):
-        return self.last_result[0].boxes.data
-     
+        if self.last_result != None:
+            return self.last_result[0].boxes.data
+        else:
+            print('False')
+            return None
         #return cv2.cvtColor(self.last_result.render()[0], cv2.COLOR_BGR2RGB)
         #return self.last_result
     def showLastSizes(self):
-        return self.last_result[0].masks.data
-        
-    
+        if self.last_result != None:
+            if self.last_result[0].masks != None:
+                return self.last_result[0].masks.data
+            else:
+                print('False')
+                return None
+        else:
+            print('False')
+            return None
 class VideoModel(Imodel):
 
     last_result=None
