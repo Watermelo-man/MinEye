@@ -117,11 +117,11 @@ class controller():
         self.res = self.model.showLastShot()
        
         if self.point1:
-            cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(width/800))), 15, (0, 255, 0), -1)
+            cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
         if self.point1 and self.point2:
-            cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(width/800))), 15, (0, 255, 0), -1)
-            cv2.circle(self.res, (int(self.point2[0] * float(height/600)),int(self.point2[1] * float(height/600))), 15, (0, 255, 0), -1)
-            cv2.line(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(width/800))), (int(self.point2[0] * float(height/600)),int(self.point2[1] * float(height/600))), (255, 0, 0), 10)
+            cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
+            cv2.circle(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), 15, (0, 255, 0), -1)
+            cv2.line(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (255, 0, 0), 10)
 
         h,w,ch = self.res.shape
         bytes_per_line = ch*w
