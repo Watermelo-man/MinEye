@@ -39,7 +39,7 @@ class controller():
     #__modelpth = r"C:\Projects\orereco\ourmodels\yolov5x.pt"
 
     def __init__(self):
-         self.kernel = universal_model.kernel.kernel(model_path=self.__modelpth)#, device=self.__computeDevice)
+         self.kernel = universal_model.kernel.kernelinst#, device=self.__computeDevice)
 
 
     #def chooseComputeDevice():
@@ -49,7 +49,9 @@ class controller():
          
     def changeModelPath(self,pth:str)->None:
         self.__modelpth = pth
-        self.kernel = universal_model.kernel.kernel(model_path=self.__modelpth)#,device=self.__computeDevice)
+         #self.kernel = universal_model.kernel.kernelinst.change_model(self.__modelpth)
+        self.kernel.change_model(self.__modelpth)
+        #,device=self.__computeDevice)
         self.selectType(self.__currentType)
 
 
@@ -180,6 +182,7 @@ class controller():
         except:
             print('No model found')
             return None
+        
         if boxes!=None and masks!=None:
             clss = boxes[:, 5]
             exist_keys = list(classes_in_shot.keys())
@@ -192,16 +195,16 @@ class controller():
                 image_mask = cv2.resize(image_mask,(width,height))
                 #cv2.imshow(image_mask)
                 #cv2.waitKey(0)
-                print(len(image_mask))
-                print(len(image_mask[0]))
+                #print(len(image_mask))
+                #print(len(image_mask[0]))
 
                 cntw = cv2.countNonZero(image_mask)
                 if self.onepixdim == 0:
                     result[key] = cntw
                 else:
                     result[key] = cntw * self.onepixdim
-                    print('RJOMBA')
-                    print(self.onepixdim)
+                    #print('RJOMBA')
+                    #print(self.onepixdim)
             return result
         else:
             print('No masks or boxes found')

@@ -36,7 +36,7 @@ class PictureModel(Imodel):
     last_result=None
     Kernel = None
 
-    def __init__(self, ker:kernel.kernel.kernel):
+    def __init__(self, ker:kernel.kernel):
 
         self.Kernel=  ker
 
@@ -46,7 +46,7 @@ class PictureModel(Imodel):
             pass
         else:
             raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
-        self.last_result = self.Kernel(ImageInput,verbose = False)#,size)
+        self.last_result = self.Kernel(ImageInput,verbose = False,device="cpu")#,size)
 
     def showLastShot(self):
         return cv2.cvtColor(self.last_result[0].plot(), cv2.COLOR_BGR2RGB)
@@ -92,7 +92,7 @@ class VideoModel(Imodel):
         
         ret, shot = VideoInput.read()
 
-        self.last_result = self.Kernel(shot,verbose = False)
+        self.last_result = self.Kernel(shot,verbose = False,device = "cpu")
 
 
     def showLastShot(self):
