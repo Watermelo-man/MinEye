@@ -7,9 +7,9 @@ model = YOLO('ourmodels/yolov8n-seg.pt')  # pretrained YOLOv8n model
 classes = model.names
 print(classes)
 # Run batched inference on a list of images
-results = model('source/bottle.jpg')  # return a list of Results objects
+results = model('source/7c98d4e3207fa8b44c42122ca7da455f.jpg')  # return a list of Results objects
 
-image = cv2.imread('source/bottle.jpg')
+image = cv2.imread('source/7c98d4e3207fa8b44c42122ca7da455f.jpg')
 height, width, channels = image.shape
 print(height,width)
 print()

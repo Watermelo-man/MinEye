@@ -178,6 +178,9 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             cont.point1 = None
             cont.point2 = None
             cont.point3 = None
+            cont.ypixlength = 0
+            cont.xpixlength = 0
+            
             self.setImage(cont.analyseShot())
         #self.display.mousePressEvent = self.get_mouse_coords
 

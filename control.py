@@ -24,8 +24,8 @@ class controller():
     source_width = None
     source_height = None
     kernel = None
-
-
+    scale_value = 1 #in mm
+    onepixdim = 0
     __computeDevice = "kek"
 
     __currentType = types.photo
@@ -131,6 +131,17 @@ class controller():
             
             cv2.line(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (int(self.point3[0] * float(width/800)),int(self.point3[1] * float(height/600))), (0, 0, 255), 10)
 
+
+            #x1x2 = (int(self.point2[0] * float(width/800)) - int(self.point1[0] * float(width/800)))
+            #y1y2 =  (int(self.point2[1] * float(height/600)) - int(self.point1[1] * float(height/600)))
+            self.xpixlength = ((int(self.point2[0] * float(width/800)) - int(self.point1[0] * float(width/800)))**2 + (int(self.point2[1] * float(height/600)) - int(self.point1[1] * float(height/600)))**2 )**0.5
+            self.ypixlength = ((int(self.point3[0] * float(width/800)) - int(self.point2[0] * float(width/800)))**2 + (int(self.point3[1] * float(height/600)) - int(self.point2[1] * float(height/600)))**2 )**0.5
+            
+            self.onepixdim = self.scale_value/self.xpixlength * self.scale_value/self.ypixlength
+            
+            print(self.xpixlength)
+            print(self.ypixlength)
+            print(self.onepixdim)
         h,w,ch = self.res.shape
         bytes_per_line = ch*w
         convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888).scaled(800,600)#,QtCore.Qt.AspectRatioMode.KeepAspectRatio)
@@ -173,8 +184,17 @@ class controller():
                 item_masks = masks[item_indicies]
                 item_mask = torch.any(item_masks,dim = 0).int() * 255
                 image_mask = item_mask.cpu().numpy().astype('uint8')
+                #cv2.imshow(image_mask)
+                #cv2.waitKey(0)
+                print(len(image_mask))
+                print(len(image_mask[0]))
                 cntw = cv2.countNonZero(image_mask)
-                result[key] = cntw
+                if self.onepixdim == 0:
+                    result[key] = cntw
+                else:
+                    result[key] = cntw * self.onepixdim
+                    print('RJOMBA')
+                    print(self.onepixdim)
             return result
         else:
             print('No masks or boxes found')
