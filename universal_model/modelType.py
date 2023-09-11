@@ -35,10 +35,10 @@ class PictureModel(Imodel):
 
     last_result=None
     Kernel = None
-
+    compute_type = None
     def __init__(self, ker:kernel.kernel):
-
-        self.Kernel=  ker
+        self.Kernel=ker.kernel
+        self.compute_type = ker.mode_type
 
     def predict(self, ImageInput, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
         #print("pic")
@@ -46,7 +46,11 @@ class PictureModel(Imodel):
             pass
         else:
             raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
-        self.last_result = self.Kernel(ImageInput,verbose = False,device="cpu")#,size)
+        
+        if self.compute_type == 'cpu':
+            self.last_result = self.Kernel(ImageInput,verbose = False,device="cpu")#,size)
+        if self.compute_type == 'cuda':
+            self.last_result = self.Kernel(ImageInput,verbose = False,device=0)
 
     def showLastShot(self):
         return cv2.cvtColor(self.last_result[0].plot(), cv2.COLOR_BGR2RGB)
@@ -73,9 +77,10 @@ class VideoModel(Imodel):
 
     last_result=None
     Kernel = None
-
-    def __init__(self, ker:kernel.kernel.kernel):
-        self.Kernel=ker
+    compute_type = None
+    def __init__(self, ker:kernel.kernel):
+        self.Kernel=ker.kernel
+        self.compute_type = ker.mode_type
 
     def predict(self, VideoInput:cv2.VideoCapture, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
         """"
@@ -91,9 +96,10 @@ class VideoModel(Imodel):
         #self.Kernel.iou = IoU
         
         ret, shot = VideoInput.read()
-
-        self.last_result = self.Kernel(shot,verbose = False,device = "cpu")
-
+        if self.compute_type == 'cpu':
+            self.last_result = self.Kernel(shot,verbose = False,device = "cpu")
+        if self.compute_type == 'cuda':
+            self.last_result = self.Kernel(shot,verbose = False,device = 0)
 
     def showLastShot(self):
         #print(self.last_result)

@@ -57,11 +57,11 @@ class controller():
 
     def selectType(self,type:int):
         if type == 1:
-            self.model = universal_model.modelType.models.selectModel(self.kernel.kernel, "PictureModel")
+            self.model = universal_model.modelType.models.selectModel(self.kernel, "PictureModel")
 
             return 0
         elif type == 2:
-            self.model = universal_model.modelType.models.selectModel(self.kernel.kernel, "VideoModel")
+            self.model = universal_model.modelType.models.selectModel(self.kernel, "VideoModel")
             return 0
         else:
             return -1
@@ -117,7 +117,7 @@ class controller():
         #print(height, width)
         self.model.predict(self.source)
         self.res = self.model.showLastShot()
-       
+        # DRY KISS EXAMPLE
         if self.point1:
             cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
         if self.point1 and self.point2:
@@ -134,17 +134,11 @@ class controller():
             cv2.line(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (int(self.point3[0] * float(width/800)),int(self.point3[1] * float(height/600))), (0, 0, 255), 10)
 
 
-            #x1x2 = (int(self.point2[0] * float(width/800)) - int(self.point1[0] * float(width/800)))
-            #y1y2 =  (int(self.point2[1] * float(height/600)) - int(self.point1[1] * float(height/600)))
             self.xpixlength = ((int(self.point2[0] * float(width/800)) - int(self.point1[0] * float(width/800)))**2 + (int(self.point2[1] * float(height/600)) - int(self.point1[1] * float(height/600)))**2 )**0.5
             self.ypixlength = ((int(self.point3[0] * float(width/800)) - int(self.point2[0] * float(width/800)))**2 + (int(self.point3[1] * float(height/600)) - int(self.point2[1] * float(height/600)))**2 )**0.5
             
             self.onepixdim = self.scale_value/self.xpixlength * self.scale_value/self.ypixlength
-            # print(len(self.res))
-            # print(len(self.res[0]))
-            # print(self.xpixlength)
-            # print(self.ypixlength)
-            # #print(self.onepixdim)
+        
         h,w,ch = self.res.shape
         bytes_per_line = ch*w
         convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888).scaled(800,600)#,QtCore.Qt.AspectRatioMode.KeepAspectRatio)
