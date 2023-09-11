@@ -89,7 +89,7 @@ class controller():
         
     point1 = None
     point2 = None    
-    
+    point3 = None
         
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
         
@@ -122,6 +122,14 @@ class controller():
             cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
             cv2.circle(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), 15, (0, 255, 0), -1)
             cv2.line(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (255, 0, 0), 10)
+        if self.point1 and self.point2 and self.point3:
+            cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
+            cv2.circle(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), 15, (0, 255, 0), -1)
+            cv2.line(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (255, 0, 0), 10)
+
+            cv2.circle(self.res, (int(self.point3[0] * float(width/800)),int(self.point3[1] * float(height/600))), 15, (0, 255, 0), -1)
+            
+            cv2.line(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (int(self.point3[0] * float(width/800)),int(self.point3[1] * float(height/600))), (0, 0, 255), 10)
 
         h,w,ch = self.res.shape
         bytes_per_line = ch*w

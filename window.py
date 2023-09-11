@@ -177,6 +177,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         if not self._calibration:
             cont.point1 = None
             cont.point2 = None
+            cont.point3 = None
             self.setImage(cont.analyseShot())
         #self.display.mousePressEvent = self.get_mouse_coords
 
@@ -189,8 +190,10 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             elif not cont.point2:
                 cont.point2 = (x, y)
                 #cv2.circle(frame, self.point2, 5, (0, 255, 0), -1)
+            elif not cont.point3:
+                 cont.point3 = (x,y)
             else:
-                cont.point1, cont.point2 = (x, y), None
+                cont.point1, cont.point2,cont.point3  = (x, y), None , None
             #self.setImage(cont.Calibrate())
             if isinstance(cont.source,PIL.JpegImagePlugin.JpegImageFile) or isinstance(cont.source, PIL.PngImagePlugin.PngImageFile):
                 self.setImage(cont.analyseShot())
