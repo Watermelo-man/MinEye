@@ -135,19 +135,19 @@ class Ui_MainWindow():
 
 
         #Sharpness label
-        self.sharpness_label = QtWidgets.QLabel(parent=self.centralwidget)
-        self.sharpness_label.setEnabled(True)
-        self.sharpness_label.setGeometry(QtCore.QRect(835, 110, 111, 25))
+        self.brigtness_label = QtWidgets.QLabel(parent=self.centralwidget)
+        self.brigtness_label.setEnabled(True)
+        self.brigtness_label.setGeometry(QtCore.QRect(835, 110, 111, 25))
         font = QtGui.QFont()
         font.setFamily("HelveticaNowDisplay Bold")
         font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
-        self.sharpness_label.setFont(font)
-        self.sharpness_label.setAutoFillBackground(False)
-        self.sharpness_label.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
-        self.sharpness_label.setLineWidth(1)
-        self.sharpness_label.setObjectName("sharpness_label")
+        self.brigtness_label.setFont(font)
+        self.brigtness_label.setAutoFillBackground(False)
+        self.brigtness_label.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        self.brigtness_label.setLineWidth(1)
+        self.brigtness_label.setObjectName("sharpness_label")
 
 
         #Accuracy label
@@ -172,17 +172,17 @@ class Ui_MainWindow():
         self.contrast_slider.setStyleSheet("background-color: rgb(105, 105, 105);")
         self.contrast_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.contrast_slider.setObjectName("contrast_slider")
-        self.contrast_slider.setRange(0,100)
+        self.contrast_slider.setRange(0,160)
         self.contrast_slider.setSingleStep(1)
 
 
         #Sharpness slider
-        self.sharpness_slider = QtWidgets.QSlider(parent=self.centralwidget)
-        self.sharpness_slider.setGeometry(QtCore.QRect(840, 140, 411, 41))
-        self.sharpness_slider.setStyleSheet("background-color: rgb(105, 105, 105);")
-        self.sharpness_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
-        self.sharpness_slider.setObjectName("sharpness_slider")
-
+        self.brightness_slider = QtWidgets.QSlider(parent=self.centralwidget)
+        self.brightness_slider.setGeometry(QtCore.QRect(840, 140, 411, 41))
+        self.brightness_slider.setStyleSheet("background-color: rgb(105, 105, 105);")
+        self.brightness_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
+        self.brightness_slider.setObjectName("sharpness_slider")
+        self.brightness_slider.setRange(-200,200)
 
         #Accuracy slider
         self.accuracy_slider = QtWidgets.QSlider(parent=self.centralwidget)
@@ -209,7 +209,7 @@ class Ui_MainWindow():
         self.accuracy_num_label.setStyleSheet("gridline-color: rgb(0, 0, 0);")
         self.accuracy_num_label.setFrameShape(QtWidgets.QFrame.Shape.Panel)
         
-        self.accuracy_num_label.setObjectName("contrast_big_label")
+        self.accuracy_num_label.setObjectName("accuracy_big_label")
         self.accuracy_num_label.setText('0.5')
 
         # self.accuracy_num_label = QtWidgets.QLabel(parent=self.centralwidget)
@@ -335,8 +335,8 @@ class Ui_MainWindow():
         self.pause.setText(_translate("MainWindow", "PAUSE"))     
         self.FileModelPanel.setText(_translate("MainWindow", "Select Model:"))
         self.SelectFileButton.setText(_translate("MainWindow", "Select File"))
-        self.contrast_big_label.setText(_translate("MainWindow", " Contrast"))
-        self.sharpness_label.setText(_translate("MainWindow", " Sharpness"))
+        self.contrast_big_label.setText(_translate("MainWindow", "Sharpness"))
+        self.brigtness_label.setText(_translate("MainWindow", " Brigthness"))
         self.accuracy_label.setText(_translate("MainWindow", " Accuracy"))
         self.calc_scale_view_btn.setText(_translate("MainWindow", "Сalculate the scale of the field of view"))
         self.calc_obj_size_btn.setText(_translate("MainWindow", "Calculate size of objects"))

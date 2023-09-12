@@ -15,7 +15,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.display.mousePressEvent = self.get_mouse_coords
 
-
+        self.brightness_slider.valueChanged.connect(self.brightness_change)
         self.contrast_slider.valueChanged.connect(self.change_contrast)
         self.accuracy_slider.valueChanged.connect(self.accuracy_change)
         self.calc_scale_view_btn.clicked.connect(self.activate_points_mode)
@@ -199,9 +199,9 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
                  cont.point3 = (x,y)
             else:
                 cont.point1, cont.point2,cont.point3  = (x, y), None , None
-            #self.setImage(cont.Calibrate())
-            #if isinstance(cont.source,PIL.JpegImagePlugin.JpegImageFile) or isinstance(cont.source, PIL.PngImagePlugin.PngImageFile):
-            self.setImage(cont.analyseShot())
+           
+            if type(cont.model == universal_model.modelType.PictureModel):
+                self.setImage(cont.analyseShot())
                 
 
         
@@ -235,10 +235,18 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     def accuracy_change(self,value):
         self.accuracy_num_label.setText(str(value/100))
         cont.change_confidence(value/100)
+        if type(cont.model == universal_model.modelType.PictureModel):
+            self.setImage(cont.analyseShot())
         # for i, num in enumerate(mineralCntDict):
         #     item = QtWidgets.QTableWidgetItem(str(num))
         #     self.table.setItem(i, 0, item)
     
     def change_contrast(self,value):
         cont.change_contrast(value/10)
-        self.setImage(cont.analyseShot())
+        if type(cont.model == universal_model.modelType.PictureModel):
+            self.setImage(cont.analyseShot())
+
+    def brightness_change(self,value):
+        cont.change_brightness(value)
+        if type(cont.model == universal_model.modelType.PictureModel):
+            self.setImage(cont.analyseShot())

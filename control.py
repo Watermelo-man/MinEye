@@ -26,6 +26,8 @@ class controller():
     scale_value = 1 #in mm
     onepixdim = 0
     contrast = 1
+    confidence = 0.5
+    brightness = 0
 
     __computeDevice = "kek"
 
@@ -59,10 +61,11 @@ class controller():
     def selectType(self,type:int):
         if type == 1:
             self.model = universal_model.modelType.models.selectModel(self.kernel, "PictureModel")
-
+            #print(type(self.model))
             return 0
         elif type == 2:
             self.model = universal_model.modelType.models.selectModel(self.kernel, "VideoModel")
+            #print(type(self.model))
             return 0
         else:
             return -1
@@ -94,6 +97,10 @@ class controller():
     point2 = None    
     point3 = None
         
+
+   
+
+
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
         
 
@@ -104,8 +111,7 @@ class controller():
        
         if isinstance(self.source, cv2.VideoCapture):
             ret, shot = self.source.read()
-        else:
-            shot = self.source
+        
 
         try:
             height, width, channels = shot.shape
@@ -116,13 +122,16 @@ class controller():
             return black
         
 
-        if self.contrast >0:
-            print(self.contrast)
-            shot = cv2.addWeighted(shot , self.contrast,shot,0,0)
-
+        # if self.contrast >0:
+        #     print(self.contrast)
+        #     shot = cv2.addWeighted(shot , 1,np.zeros(shot.shape,shot.dtype),0,self.contrast)
             
         #print(height, width)
-        self.model.predict(shot)
+        if isinstance(self.source, cv2.VideoCapture):
+            self.model.predict(ImageInput = self.source,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness)
+        else:
+            self.model.predict(ImageInput = shot,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness)
+
         self.res = self.model.showLastShot()
         # DRY KISS EXAMPLE
         if self.point1:
@@ -213,11 +222,12 @@ class controller():
         
 
     def change_confidence(self,value):
-        self.model.confidence = value    
+        self.confidence = value    
 
 
     def change_contrast(self,value):
         self.contrast = value
 
-
+    def change_brightness(self,value):
+        self.brightness = value
 cont = controller()

@@ -36,17 +36,48 @@ class PictureModel(Imodel):
     last_result=None
     Kernel = None
     compute_type = None
+    contrast = 0
+    brightness = 0
     def __init__(self, ker:kernel.kernel):
         self.Kernel=ker.kernel
         self.compute_type = ker.mode_type
 
-    def predict(self, ImageInput, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
+
+    def apply_contrast(self,input_img, contrast = 1):
+       # CLAHE (Contrast Limited Adaptive Histogram Equalization)
+        clahe = cv2.createCLAHE(clipLimit=contrast, tileGridSize=(8,8))
+
+        lab = cv2.cvtColor(input_img, cv2.COLOR_BGR2LAB)  # convert from BGR to LAB color space
+        l, a, b = cv2.split(lab)  # split on 3 different channels
+
+        l2 = clahe.apply(l)  # apply CLAHE to the L-channel
+
+        lab = cv2.merge((l2,a,b))  # merge channels
+        img2 = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)  # convert from LAB to BGR
+        return img2
+
+
+    def apply_brightness(self,shot,brightness):
+        shot = cv2.addWeighted(shot , 1,np.zeros(shot.shape,shot.dtype),0,brightness)
+        return shot
+        
+    def predict(self, ImageInput, confCoef:float = 0.5,contrast:float = 0,brightness:float=0):# IoU:float = 0.5):
         #print("pic")
         # if isinstance(ImageInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
         #     pass
         # else:
         #     raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
-        
+        self.contrast = contrast
+        self.confidence = confCoef
+        self.brightness = brightness
+    
+        if self.brightness!=0:
+      
+            ImageInput = self.apply_brightness(ImageInput,brightness)
+
+        if self.contrast >0:
+            ImageInput = self.apply_contrast(ImageInput,self.contrast)
+
         if self.compute_type == 'cpu':
             self.last_result = self.Kernel(ImageInput,verbose = False,device="cpu",conf = self.confidence)#,size)
         if self.compute_type == 'cuda':
@@ -75,6 +106,8 @@ class PictureModel(Imodel):
             return None
 class VideoModel(Imodel):
     confidence = 0.5
+    contrast = 0
+    brightness = 0
     last_result=None
     Kernel = None
     compute_type = None
@@ -82,7 +115,24 @@ class VideoModel(Imodel):
         self.Kernel=ker.kernel
         self.compute_type = ker.mode_type
 
-    def predict(self, VideoInput:cv2.VideoCapture, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
+    def apply_contrast(self,input_img, contrast = 1):
+       # CLAHE (Contrast Limited Adaptive Histogram Equalization)
+        clahe = cv2.createCLAHE(clipLimit=contrast, tileGridSize=(8,8))
+
+        lab = cv2.cvtColor(input_img, cv2.COLOR_BGR2LAB)  # convert from BGR to LAB color space
+        l, a, b = cv2.split(lab)  # split on 3 different channels
+
+        l2 = clahe.apply(l)  # apply CLAHE to the L-channel
+
+        lab = cv2.merge((l2,a,b))  # merge channels
+        img2 = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)  # convert from LAB to BGR
+        return img2
+
+    def apply_brightness(self,shot,brightness):
+            shot = cv2.addWeighted(shot , 1,np.zeros(shot.shape,shot.dtype),0,brightness)
+            return shot
+
+    def predict(self, ImageInput:cv2.VideoCapture, confCoef:float = 0.5,contrast:float = 0,brightness=0 ):#, IoU:float = 0.5):
         """"
         #make check for cv camera
         if isinstance(ViedoInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
@@ -91,11 +141,24 @@ class VideoModel(Imodel):
         else:
             raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
         """
-
+        self.contrast = contrast
+        self.confidence = confCoef
+        self.brightness = brightness
         #self.Kernel.conf = confCoef
         #self.Kernel.iou = IoU
         
-        ret, shot = VideoInput.read()
+        ret, shot = ImageInput.read()
+
+        if self.brightness != 0:
+            shot = self.apply_brightness(shot,self.brightness)
+
+        if self.contrast >0:
+            shot = self.apply_contrast(shot,self.contrast)
+            #print(self.contrast)
+            #shot = cv2.addWeighted(shot , 1,np.zeros(shot.shape,shot.dtype),0,self.contrast)
+
+        
+
         if self.compute_type == 'cpu':
             self.last_result = self.Kernel(shot,verbose = False,device = "cpu",conf = self.confidence)
         if self.compute_type == 'cuda':
