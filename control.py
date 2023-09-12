@@ -10,7 +10,7 @@ import os
 from collections import Counter
 import torch
 import PIL
-import numpy
+import numpy as np
 
 class types(Enum):
     photo = 1
@@ -25,6 +25,8 @@ class controller():
     kernel = None
     scale_value = 1 #in mm
     onepixdim = 0
+    contrast = 1
+
     __computeDevice = "kek"
 
     __currentType = types.photo
@@ -94,6 +96,9 @@ class controller():
         
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
         
+
+        shot = self.source
+        
         #height, width, channels = self.source.shape
         #print(height,width)
        
@@ -109,8 +114,15 @@ class controller():
             black = QImage()
             black.fill(QtCore.Qt.GlobalColor.black)
             return black
+        
+
+        if self.contrast >0:
+            print(self.contrast)
+            shot = cv2.addWeighted(shot , self.contrast,shot,0,0)
+
+            
         #print(height, width)
-        self.model.predict(self.source)
+        self.model.predict(shot)
         self.res = self.model.showLastShot()
         # DRY KISS EXAMPLE
         if self.point1:
@@ -202,4 +214,10 @@ class controller():
 
     def change_confidence(self,value):
         self.model.confidence = value    
+
+
+    def change_contrast(self,value):
+        self.contrast = value
+
+
 cont = controller()

@@ -15,6 +15,8 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.display.mousePressEvent = self.get_mouse_coords
 
+
+        self.contrast_slider.valueChanged.connect(self.change_contrast)
         self.accuracy_slider.valueChanged.connect(self.accuracy_change)
         self.calc_scale_view_btn.clicked.connect(self.activate_points_mode)
         self.calc_obj_size_btn.clicked.connect(self.Count)
@@ -236,3 +238,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         # for i, num in enumerate(mineralCntDict):
         #     item = QtWidgets.QTableWidgetItem(str(num))
         #     self.table.setItem(i, 0, item)
+    
+    def change_contrast(self,value):
+        cont.change_contrast(value/10)
+        self.setImage(cont.analyseShot())

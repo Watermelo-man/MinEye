@@ -172,6 +172,8 @@ class Ui_MainWindow():
         self.contrast_slider.setStyleSheet("background-color: rgb(105, 105, 105);")
         self.contrast_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.contrast_slider.setObjectName("contrast_slider")
+        self.contrast_slider.setRange(0,100)
+        self.contrast_slider.setSingleStep(1)
 
 
         #Sharpness slider
