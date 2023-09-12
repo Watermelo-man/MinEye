@@ -335,7 +335,7 @@ class Ui_MainWindow():
         self.pause.setText(_translate("MainWindow", "PAUSE"))     
         self.FileModelPanel.setText(_translate("MainWindow", "Select Model:"))
         self.SelectFileButton.setText(_translate("MainWindow", "Select File"))
-        self.contrast_big_label.setText(_translate("MainWindow", "Sharpness"))
+        self.contrast_big_label.setText(_translate("MainWindow", " Sharpness"))
         self.brigtness_label.setText(_translate("MainWindow", " Brigthness"))
         self.accuracy_label.setText(_translate("MainWindow", " Accuracy"))
         self.calc_scale_view_btn.setText(_translate("MainWindow", "Сalculate the scale of the field of view"))

@@ -27,6 +27,13 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         self.camera_off.clicked.connect(self.stop_cam)
 
     def changeModel(self):
+        try:
+            if self.thread_cam != None:
+                self.stop_cam()
+            if self.thread_vid != None:
+                self.stop_video()
+        except:
+            pass
         path = str(os.path.dirname(os.path.abspath(__file__)))
         path = os.path.join(path,'ourmodels')
         path = os.path.join(path,self.SelectModelBox.currentText())
@@ -182,8 +189,8 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             cont.point3 = None
             cont.ypixlength = 0
             cont.xpixlength = 0
-            
-            self.setImage(cont.analyseShot())
+            if type(cont.model == universal_model.modelType.PictureModel):
+                self.setImage(cont.analyseShot())
         #self.display.mousePressEvent = self.get_mouse_coords
 
     def get_mouse_coords(self, event):

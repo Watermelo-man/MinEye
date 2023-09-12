@@ -96,13 +96,8 @@ class controller():
     point1 = None
     point2 = None    
     point3 = None
-        
-
-   
-
 
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
-        
 
         shot = self.source
         
@@ -203,18 +198,12 @@ class controller():
                 item_mask = torch.any(item_masks,dim = 0).int() * 255
                 image_mask = item_mask.cpu().numpy().astype('uint8')
                 image_mask = cv2.resize(image_mask,(width,height))
-                #cv2.imshow(image_mask)
-                #cv2.waitKey(0)
-                #print(len(image_mask))
-                #print(len(image_mask[0]))
 
                 cntw = cv2.countNonZero(image_mask)
                 if self.onepixdim == 0:
                     result[key] = cntw
                 else:
                     result[key] = cntw * self.onepixdim
-                    #print('RJOMBA')
-                    #print(self.onepixdim)
             return result
         else:
             print('No masks or boxes found')
@@ -230,4 +219,5 @@ class controller():
 
     def change_brightness(self,value):
         self.brightness = value
+        
 cont = controller()
