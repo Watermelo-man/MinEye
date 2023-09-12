@@ -32,7 +32,7 @@ class Imodel(ABC):
         pass
 
 class PictureModel(Imodel):
-
+    confidence = 0.5
     last_result=None
     Kernel = None
     compute_type = None
@@ -42,15 +42,15 @@ class PictureModel(Imodel):
 
     def predict(self, ImageInput, size:int = 640, confCoef:float = 0.5, IoU:float = 0.5):
         #print("pic")
-        if isinstance(ImageInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
-            pass
-        else:
-            raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
+        # if isinstance(ImageInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
+        #     pass
+        # else:
+        #     raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
         
         if self.compute_type == 'cpu':
-            self.last_result = self.Kernel(ImageInput,verbose = False,device="cpu")#,size)
+            self.last_result = self.Kernel(ImageInput,verbose = False,device="cpu",conf = self.confidence)#,size)
         if self.compute_type == 'cuda':
-            self.last_result = self.Kernel(ImageInput,verbose = False,device=0)
+            self.last_result = self.Kernel(ImageInput,verbose = False,device=0,conf = self.confidence)
 
     def showLastShot(self):
         return cv2.cvtColor(self.last_result[0].plot(), cv2.COLOR_BGR2RGB)
@@ -74,7 +74,7 @@ class PictureModel(Imodel):
             print('False')
             return None
 class VideoModel(Imodel):
-
+    confidence = 0.5
     last_result=None
     Kernel = None
     compute_type = None
@@ -97,9 +97,9 @@ class VideoModel(Imodel):
         
         ret, shot = VideoInput.read()
         if self.compute_type == 'cpu':
-            self.last_result = self.Kernel(shot,verbose = False,device = "cpu")
+            self.last_result = self.Kernel(shot,verbose = False,device = "cpu",conf = self.confidence)
         if self.compute_type == 'cuda':
-            self.last_result = self.Kernel(shot,verbose = False,device = 0)
+            self.last_result = self.Kernel(shot,verbose = False,device = 0,conf = self.confidence)
 
     def showLastShot(self):
         #print(self.last_result)

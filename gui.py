@@ -184,11 +184,38 @@ class Ui_MainWindow():
 
         #Accuracy slider
         self.accuracy_slider = QtWidgets.QSlider(parent=self.centralwidget)
-        self.accuracy_slider.setGeometry(QtCore.QRect(840, 230, 411, 41))
+        
+        self.accuracy_slider.setGeometry(QtCore.QRect(840, 230, 311, 41))
         self.accuracy_slider.setStyleSheet("background-color: rgb(105, 105, 105);")
         self.accuracy_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.accuracy_slider.setObjectName("accuracy_slider")
         MainWindow.setCentralWidget(self.centralwidget)
+        self.accuracy_slider.setRange(1,100)
+        self.accuracy_slider.setSingleStep(1)
+        self.accuracy_slider.setValue(50)
+
+
+        self.accuracy_num_label = QtWidgets.QLabel(parent=self.centralwidget)
+        self.accuracy_num_label.setGeometry(QtCore.QRect(1170, 230, 75, 41))
+        self.accuracy_num_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("HelveticaNowDisplay Bold")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.accuracy_num_label.setFont(font)
+        self.accuracy_num_label.setStyleSheet("gridline-color: rgb(0, 0, 0);")
+        self.accuracy_num_label.setFrameShape(QtWidgets.QFrame.Shape.Panel)
+        
+        self.accuracy_num_label.setObjectName("contrast_big_label")
+        self.accuracy_num_label.setText('0.5')
+
+        # self.accuracy_num_label = QtWidgets.QLabel(parent=self.centralwidget)
+        # self.accuracy_num_label.setFont(font)
+        # self.accuracy_num_label.setGeometry(QtCore.QRect(1281, 230, 311, 41))
+        # self.accuracy_num_label.setStyleSheet("background-color: rgb(105, 105, 105);")
+        # self.accuracy_num_label.setObjectName("accuracy_label")
+        # self.accuracy_num_label.setText('0.5')
         '''
         self.label = QtWidgets.QLabel("GUI Applications with PyQt6", self)
         self.label.setStyleSheet("background-color: rgb(105, 105, 105);")

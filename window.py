@@ -15,7 +15,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.display.mousePressEvent = self.get_mouse_coords
 
-
+        self.accuracy_slider.valueChanged.connect(self.accuracy_change)
         self.calc_scale_view_btn.clicked.connect(self.activate_points_mode)
         self.calc_obj_size_btn.clicked.connect(self.Count)
         self.StartButton.clicked.connect(self.start)
@@ -198,8 +198,8 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 cont.point1, cont.point2,cont.point3  = (x, y), None , None
             #self.setImage(cont.Calibrate())
-            if isinstance(cont.source,PIL.JpegImagePlugin.JpegImageFile) or isinstance(cont.source, PIL.PngImagePlugin.PngImageFile):
-                self.setImage(cont.analyseShot())
+            #if isinstance(cont.source,PIL.JpegImagePlugin.JpegImageFile) or isinstance(cont.source, PIL.PngImagePlugin.PngImageFile):
+            self.setImage(cont.analyseShot())
                 
 
         
@@ -229,6 +229,10 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.size_table.setItem(cnt, 1, item)
                 cnt+=1
 
+
+    def accuracy_change(self,value):
+        self.accuracy_num_label.setText(str(value/100))
+        cont.change_confidence(value/100)
         # for i, num in enumerate(mineralCntDict):
         #     item = QtWidgets.QTableWidgetItem(str(num))
         #     self.table.setItem(i, 0, item)

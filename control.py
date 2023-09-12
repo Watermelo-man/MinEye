@@ -2,7 +2,6 @@ import sys
 from pathlib import Path
 import universal_model 
 import cv2
-from PIL import Image
 from PyQt6.QtGui import QPixmap, QImage
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QFileDialog
@@ -77,7 +76,7 @@ class controller():
                 self.__currentType = 2
             else:
                 self.selectType(1)
-                self.source = Image.open(str(self.path))
+                self.source = cv2.imread(str(self.path)) #Image.open(str(self.path))
                 self.__currentType = 1
             return 0
         elif src == 2:
@@ -97,12 +96,8 @@ class controller():
         
         #height, width, channels = self.source.shape
         #print(height,width)
-        if isinstance(self.source, PIL.JpegImagePlugin.JpegImageFile) or isinstance(self.source, PIL.PngImagePlugin.PngImageFile):
-            
-            shot = numpy.array(self.source)
-            # Convert RGB to BGR
-            shot = shot[:, :, ::-1].copy()
-        elif isinstance(self.source, cv2.VideoCapture):
+       
+        if isinstance(self.source, cv2.VideoCapture):
             ret, shot = self.source.read()
         else:
             shot = self.source
@@ -203,4 +198,8 @@ class controller():
         else:
             print('No masks or boxes found')
             return None
+        
+
+    def change_confidence(self,value):
+        self.model.confidence = value    
 cont = controller()
