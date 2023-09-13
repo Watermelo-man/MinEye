@@ -168,21 +168,52 @@ class Ui_MainWindow():
 
         #Contrast slider
         self.contrast_slider = QtWidgets.QSlider(parent=self.centralwidget)
-        self.contrast_slider.setGeometry(QtCore.QRect(840, 50, 411, 41))
+        self.contrast_slider.setGeometry(QtCore.QRect(840, 50, 311, 41))
         self.contrast_slider.setStyleSheet("background-color: rgb(105, 105, 105);")
         self.contrast_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.contrast_slider.setObjectName("contrast_slider")
         self.contrast_slider.setRange(0,160)
         self.contrast_slider.setSingleStep(1)
+        #contrast label
+        self.contrast_num_label = QtWidgets.QLabel(parent=self.centralwidget)
+        self.contrast_num_label.setGeometry(QtCore.QRect(1170, 50, 75, 41))
+        self.contrast_num_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("HelveticaNowDisplay Bold")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.contrast_num_label.setFont(font)
+        self.contrast_num_label.setStyleSheet("gridline-color: rgb(0, 0, 0);")
+        self.contrast_num_label.setFrameShape(QtWidgets.QFrame.Shape.Panel)
+        
+        self.contrast_num_label.setObjectName("accuracy_big_label")
+        self.contrast_num_label.setText('0')
 
 
-        #Sharpness slider
+        #brightness slider
         self.brightness_slider = QtWidgets.QSlider(parent=self.centralwidget)
-        self.brightness_slider.setGeometry(QtCore.QRect(840, 140, 411, 41))
+        self.brightness_slider.setGeometry(QtCore.QRect(840, 140, 311, 41))
         self.brightness_slider.setStyleSheet("background-color: rgb(105, 105, 105);")
         self.brightness_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.brightness_slider.setObjectName("sharpness_slider")
         self.brightness_slider.setRange(-200,200)
+        #brightness label
+        self.brightness_num_label = QtWidgets.QLabel(parent=self.centralwidget)
+        self.brightness_num_label.setGeometry(QtCore.QRect(1170, 140, 75, 41))
+        self.brightness_num_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("HelveticaNowDisplay Bold")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.brightness_num_label.setFont(font)
+        self.brightness_num_label.setStyleSheet("gridline-color: rgb(0, 0, 0);")
+        self.brightness_num_label.setFrameShape(QtWidgets.QFrame.Shape.Panel)
+        
+        self.brightness_num_label.setObjectName("accuracy_big_label")
+        self.brightness_num_label.setText('0')
+
 
         #Accuracy slider
         self.accuracy_slider = QtWidgets.QSlider(parent=self.centralwidget)

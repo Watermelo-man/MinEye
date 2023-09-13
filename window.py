@@ -249,11 +249,13 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         #     self.table.setItem(i, 0, item)
     
     def change_contrast(self,value):
+        self.contrast_num_label.setText(str(value/10))
         cont.change_contrast(value/10)
         if type(cont.model == universal_model.modelType.PictureModel):
             self.setImage(cont.analyseShot())
 
     def brightness_change(self,value):
+        self.brightness_num_label.setText(str(value))
         cont.change_brightness(value)
         if type(cont.model == universal_model.modelType.PictureModel):
             self.setImage(cont.analyseShot())
