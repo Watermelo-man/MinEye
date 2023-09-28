@@ -2,6 +2,7 @@ from ultralytics import YOLO
 import torch
 import cv2
 import numpy 
+
 #mport torchvision.transforms.functional as F
 #import pathlib
 
@@ -40,12 +41,13 @@ class kernel():
 
             if self.mode_type == None:
                 if torch.cuda.is_available():
+                    
                     answ = input('There is some CUDA, do you want to use it?(Y/N)')
                     if answ == 'Y':
                         self.mode_type = 'cuda'
                         model = YOLO(model_path)
                         #model = model.export()
-                        self.kernel = model(device = 0)#torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True).cuda()
+                        self.kernel = model#torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True).cuda()
                         #self.kernel
                         print("CUDA MODE")
                     else:
@@ -67,7 +69,7 @@ class kernel():
         if  self.mode_type == 'cuda':
             model = YOLO(model_path)
             #model = model.export()
-            self.kernel = model(device = 0)#torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True).cuda()
+            self.kernel = model#torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True).cuda()
             #self.kernel
             print("CUDA MODE")
         if  self.mode_type == 'cpu':

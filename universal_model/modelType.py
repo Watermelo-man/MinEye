@@ -78,6 +78,8 @@ class PictureModel(Imodel):
         if self.contrast >0:
             ImageInput = self.apply_contrast(ImageInput,self.contrast)
 
+        #ImageInput = cv2.cvtColor(ImageInput, cv2.COLOR_BGR2RGB)
+
         if self.compute_type == 'cpu':
             self.last_result = self.Kernel(ImageInput,verbose = False,device="cpu",conf = self.confidence)#,size)
         if self.compute_type == 'cuda':

@@ -12,12 +12,16 @@ import torch
 import PIL
 import numpy as np
 
+
+
+
 class types(Enum):
     photo = 1
     video = 2
 
 
 class controller():
+    mutex_for_gui = QtCore.QMutex()
     model = None
     source = None
     source_width = None
@@ -122,11 +126,12 @@ class controller():
         #     shot = cv2.addWeighted(shot , 1,np.zeros(shot.shape,shot.dtype),0,self.contrast)
             
         #print(height, width)
+        self.mutex_for_gui.lock()
         if isinstance(self.source, cv2.VideoCapture):
             self.model.predict(ImageInput = self.source,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness)
         else:
             self.model.predict(ImageInput = shot,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness)
-
+        self.mutex_for_gui.unlock()
         self.res = self.model.showLastShot()
         # DRY KISS EXAMPLE
         if self.point1:
@@ -147,8 +152,8 @@ class controller():
 
             self.xpixlength = ((int(self.point2[0] * float(width/800)) - int(self.point1[0] * float(width/800)))**2 + (int(self.point2[1] * float(height/600)) - int(self.point1[1] * float(height/600)))**2 )**0.5
             self.ypixlength = ((int(self.point3[0] * float(width/800)) - int(self.point2[0] * float(width/800)))**2 + (int(self.point3[1] * float(height/600)) - int(self.point2[1] * float(height/600)))**2 )**0.5
-            
-            self.onepixdim = self.scale_value/self.xpixlength * self.scale_value/self.ypixlength
+            if self.xpixlength != 0 or self.ypixlength != 0:
+                self.onepixdim = self.scale_value/self.xpixlength * self.scale_value/self.ypixlength
         
         h,w,ch = self.res.shape
         bytes_per_line = ch*w
@@ -211,13 +216,18 @@ class controller():
         
 
     def change_confidence(self,value):
+        self.mutex_for_gui.lock()
         self.confidence = value    
-
+        self.mutex_for_gui.unlock()
 
     def change_contrast(self,value):
+        self.mutex_for_gui.lock()
         self.contrast = value
+        self.mutex_for_gui.unlock()
 
     def change_brightness(self,value):
+        self.mutex_for_gui.lock()
         self.brightness = value
+        self.mutex_for_gui.unlock()
         
 cont = controller()
