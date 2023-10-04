@@ -152,6 +152,7 @@ class controller():
 
             self.xpixlength = ((int(self.point2[0] * float(width/800)) - int(self.point1[0] * float(width/800)))**2 + (int(self.point2[1] * float(height/600)) - int(self.point1[1] * float(height/600)))**2 )**0.5
             self.ypixlength = ((int(self.point3[0] * float(width/800)) - int(self.point2[0] * float(width/800)))**2 + (int(self.point3[1] * float(height/600)) - int(self.point2[1] * float(height/600)))**2 )**0.5
+            
             if self.xpixlength != 0 or self.ypixlength != 0:
                 self.onepixdim = self.scale_value/self.xpixlength * self.scale_value/self.ypixlength
         
@@ -230,4 +231,21 @@ class controller():
         self.brightness = value
         self.mutex_for_gui.unlock()
         
+    def set_point_1(self,coords):
+        self.mutex_for_gui.lock()
+        self.point1 = coords
+        self.mutex_for_gui.unlock()
+
+    def set_point_2(self,coords):
+        self.mutex_for_gui.lock()
+        self.point2 = coords
+        self.mutex_for_gui.unlock()
+
+    def set_point_3(self,coords):
+        self.mutex_for_gui.lock()
+        self.point3 = coords    
+        self.mutex_for_gui.unlock()
+
+
+
 cont = controller()

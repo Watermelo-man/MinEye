@@ -6,6 +6,7 @@ import os
 class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
     _calibration = False
+    pause_flag = False
 
     def __init__(self):
         super().__init__()
@@ -30,7 +31,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             if self.thread_cam != None:
                 self.stop_cam()
-            if self.thread_vid != None:
+            elif self.thread_vid != None:
                 self.stop_video()
         except:
             pass
@@ -94,6 +95,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.thread_vid.stop()
             self.thread_vid.changePixmap.disconnect(self.setImage)
             del self.thread_vid
+            #self.thread_vid = None
             cont.source = None
             self.StartButton.clicked.disconnect(self.stop_video)
             self.StartButton.clicked.connect(self.start)
@@ -110,6 +112,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.pause.clicked.disconnect(self.pause_video)
             self.pause.setText("CONTINUE")
             self.pause.clicked.connect(self.continue_video)
+            self.pause_flag = True
         except:
             error = QtWidgets.QMessageBox()
             error.setWindowTitle("Error")
@@ -126,6 +129,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.pause.clicked.disconnect(self.continue_video)
             self.pause.setText("PAUSE")
             self.pause.clicked.connect(self.pause_video)
+            self.pause_flag = False
         except:
             error = QtWidgets.QMessageBox()
             error.setWindowTitle("Error")
@@ -160,6 +164,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.thread_cam.stop()
             self.thread_cam.changePixmap.disconnect(self.setImage)
             del self.thread_cam
+            #self.thread_cam = None
             cont.source = None
             self.camera_off.setEnabled(False)
             self.camera_on.setEnabled(True)
@@ -189,25 +194,40 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             cont.point3 = None
             cont.ypixlength = 0
             cont.xpixlength = 0
-            if type(cont.model == universal_model.modelType.PictureModel):
+
+            # if self.pause:
+            #     self.setImage(cont.analyseShot())
+
+            if type(cont.model) == universal_model.modelType.PictureModel:
                 self.setImage(cont.analyseShot())
         #self.display.mousePressEvent = self.get_mouse_coords
 
     def get_mouse_coords(self, event):
+
         if self._calibration:
             x, y = event.pos().x(), event.pos().y()
+        
             if not cont.point1:
-                cont.point1 = (x, y)
+                cont.set_point_1((x,y))
+                #cont.point1 = (x, y)
                 #cv2.circle(frame, self.point1, 5, (0, 255, 0), -1)
             elif not cont.point2:
-                cont.point2 = (x, y)
+                cont.set_point_2((x,y))
+                #cont.point2 = (x, y)
                 #cv2.circle(frame, self.point2, 5, (0, 255, 0), -1)
             elif not cont.point3:
-                 cont.point3 = (x,y)
+                 cont.set_point_3((x,y))
+                 #cont.point3 = (x,y)
             else:
-                cont.point1, cont.point2,cont.point3  = (x, y), None , None
-           
-            if type(cont.model == universal_model.modelType.PictureModel):
+                cont.set_point_1((x,y))
+                cont.set_point_2(None)
+                cont.set_point_3(None)
+                #cont.point1, cont.point2,cont.point3  = (x, y), None , None
+            
+            # if self.pause:
+            #     self.setImage(cont.analyseShot())
+
+            if type(cont.model) == universal_model.modelType.PictureModel:
                 self.setImage(cont.analyseShot())
                 
 
@@ -224,7 +244,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             for key, value in mineralCntDict.items():
                 item = QtWidgets.QTableWidgetItem(str(key))
                 self.count_table.setItem(cnt, 0, item)
-                item = QtWidgets.QTableWidgetItem(str(value))
+                item = QtWidgets.QTableWidgetItem(str(round(value,3)))
                 self.count_table.setItem(cnt, 1, item)
                 cnt+=1
         mineralSize = cont.CountSquare(mineralCntDict)
@@ -234,7 +254,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             for key, value in mineralSize.items():
                 item = QtWidgets.QTableWidgetItem(str(key))
                 self.size_table.setItem(cnt, 0, item)
-                item = QtWidgets.QTableWidgetItem(str(value))
+                item = QtWidgets.QTableWidgetItem(str(round(value,3)))
                 self.size_table.setItem(cnt, 1, item)
                 cnt+=1
 
@@ -242,8 +262,13 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     def accuracy_change(self,value):
         self.accuracy_num_label.setText(str(value/100))
         cont.change_confidence(value/100)
-        if type(cont.model == universal_model.modelType.PictureModel):
+
+        # if self.pause_flag:
+        #     self.setImage(cont.)
+
+        if type(cont.model) == universal_model.modelType.PictureModel:
             self.setImage(cont.analyseShot())
+
         # for i, num in enumerate(mineralCntDict):
         #     item = QtWidgets.QTableWidgetItem(str(num))
         #     self.table.setItem(i, 0, item)
@@ -251,11 +276,19 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     def change_contrast(self,value):
         self.contrast_num_label.setText(str(value/10))
         cont.change_contrast(value/10)
-        if type(cont.model == universal_model.modelType.PictureModel):
+
+        # if self.pause_flag:
+        #     self.setImage(cont.analyseShot())
+
+        if type(cont.model) == universal_model.modelType.PictureModel:
             self.setImage(cont.analyseShot())
 
     def brightness_change(self,value):
         self.brightness_num_label.setText(str(value))
         cont.change_brightness(value)
-        if type(cont.model == universal_model.modelType.PictureModel):
+
+        # if self.pause_flag :
+        #     self.setImage(cont.analyseShot())
+
+        if type(cont.model) == universal_model.modelType.PictureModel:
             self.setImage(cont.analyseShot())
