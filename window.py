@@ -136,7 +136,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.pause_flag = True
             cont.selectSource(3)
 
-            cont.source = cont.source.read()
+            #cont.source = cont.source.read()
             cont.selectType(1)
         except:
             error = QtWidgets.QMessageBox()
