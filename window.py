@@ -14,8 +14,11 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
         #connections
 
-        self.display.mousePressEvent = self.get_mouse_coords
+        self.pause.clicked.connect(self.pause_video)
 
+        self.display.mousePressEvent = self.get_mouse_coords
+        self.calc_scale_view_btn.setEnabled(False)
+        self.calc_obj_size_btn.setEnabled(False)
         self.brightness_slider.valueChanged.connect(self.brightness_change)
         self.contrast_slider.valueChanged.connect(self.change_contrast)
         self.accuracy_slider.valueChanged.connect(self.accuracy_change)
@@ -64,6 +67,8 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             if Path(str(cont.path)).suffix in ['.mp4', '.flv', '.ts', '.mts', '.avi']:
                 if cont.source is not None:
+                    self.calc_scale_view_btn.setEnabled(True)
+                    self.calc_obj_size_btn.setEnabled(True)
                     self.StartButton.clicked.disconnect(self.start)
                     self.StartButton.setText("STOP")
                     self.thread_vid = ThreadOpenCVVideo()
@@ -71,7 +76,11 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.thread_vid.start()
                     self.StartButton.clicked.connect(self.stop_video)
                     self.pause.setEnabled(True)
-                    self.pause.clicked.connect(self.pause_video)
+                    self.SelectModelBox.setEnabled(False)
+                    self.SelectFileButton.setEnabled(False)
+                    self.camera_off.setEnabled(False)
+                    self.camera_on.setEnabled(False)
+                    #self.pause.clicked.connect(self.pause_video)
 
                     
                 else:
@@ -92,6 +101,8 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     #Stop video
     def stop_video(self):
         try:
+            self.calc_scale_view_btn.setEnabled(False)
+            self.calc_obj_size_btn.setEnabled(False)
             self.thread_vid.stop()
             self.thread_vid.changePixmap.disconnect(self.setImage)
             del self.thread_vid
@@ -100,7 +111,17 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.StartButton.clicked.disconnect(self.stop_video)
             self.StartButton.clicked.connect(self.start)
             self.StartButton.setText("START")
+            try:
+                self.pause.clicked.disconnect(self.continue_video)
+                self.pause.setText("PAUSE")
+                self.pause.clicked.connect(self.pause_video)
+            except:
+                pass
+            self.SelectModelBox.setEnabled(True)
+            self.SelectFileButton.setEnabled(True)
             self.pause.setEnabled(False)
+            self.camera_off.setEnabled(True)
+            self.camera_on.setEnabled(True)
         except AttributeError as ex:
             print(ex)
 
@@ -108,11 +129,15 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     #Pause video
     def pause_video(self):
         try:
-            self.thread_vid.recordStatus = 1
+            self.thread_vid.recordStatus = 0#1
             self.pause.clicked.disconnect(self.pause_video)
             self.pause.setText("CONTINUE")
             self.pause.clicked.connect(self.continue_video)
             self.pause_flag = True
+            cont.selectSource(3)
+
+            cont.source = cont.source.read()
+            cont.selectType(1)
         except:
             error = QtWidgets.QMessageBox()
             error.setWindowTitle("Error")
@@ -125,10 +150,12 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     #Continue video
     def continue_video(self):
         try:
+            cont.selectSource(4)
             self.thread_vid.recordStatus = 0
             self.pause.clicked.disconnect(self.continue_video)
             self.pause.setText("PAUSE")
             self.pause.clicked.connect(self.pause_video)
+            
             self.pause_flag = False
         except:
             error = QtWidgets.QMessageBox()
@@ -142,12 +169,19 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     #Camera and thread start
     def cam(self):
         try:
+            self.calc_scale_view_btn.setEnabled(True)
+            self.calc_obj_size_btn.setEnabled(True)
+            self.camera_on.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+                                               "selection-background-color: rgb(0, 0, 0);\n"
+                                               "gridline-color: rgb(0, 0, 0);")
+            self.SelectFileButton.setEnabled(False)
             self.thread_cam = ThreadOpenCV()                                     
             self.thread_cam.changePixmap.connect(self.setImage)
             cont.selectSource(2)
             self.thread_cam.start()
             self.camera_off.setEnabled(True)
             self.camera_on.setEnabled(False)
+            self.StartButton.setEnabled(False)
             #self.pushButton.setEnabled(False)
         except:
             error = QtWidgets.QMessageBox()
@@ -161,6 +195,9 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     #Camera and thread stop
     def stop_cam(self):
         try:
+            
+           
+            
             self.thread_cam.stop()
             self.thread_cam.changePixmap.disconnect(self.setImage)
             del self.thread_cam
@@ -168,6 +205,13 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             cont.source = None
             self.camera_off.setEnabled(False)
             self.camera_on.setEnabled(True)
+            self.calc_scale_view_btn.setEnabled(False)
+            self.calc_obj_size_btn.setEnabled(False)
+            self.StartButton.setEnabled(True)
+            self.SelectFileButton.setEnabled(True)
+            self.camera_on.setStyleSheet("background-color: rgb(126, 126, 126);\n"
+                                               "selection-background-color: rgb(0, 0, 0);\n"
+                                               "gridline-color: rgb(0, 0, 0);")
             #self.pushButton.setEnabled(True)
         except AttributeError as ex:
             print(ex)
@@ -187,14 +231,25 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def activate_points_mode(self):
+        self.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.CrossCursor))
+        self.calc_scale_view_btn.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+                                               "selection-background-color: rgb(0, 0, 0);\n"
+                                               "gridline-color: rgb(0, 0, 0);")
         self._calibration = not self._calibration
+
+        self.camera_off.setEnabled(not self._calibration)
+        self.StartButton.setEnabled(not self._calibration)
+
         if not self._calibration:
             cont.point1 = None
             cont.point2 = None
             cont.point3 = None
             cont.ypixlength = 0
             cont.xpixlength = 0
-
+            self.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
+            self.calc_scale_view_btn.setStyleSheet("background-color: rgb(126, 126, 126);\n"
+                                               "selection-background-color: rgb(0, 0, 0);\n"
+                                               "gridline-color: rgb(0, 0, 0);")
             # if self.pause:
             #     self.setImage(cont.analyseShot())
 

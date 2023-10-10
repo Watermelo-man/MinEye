@@ -32,7 +32,7 @@ class controller():
     contrast = 1
     confidence = 0.5
     brightness = 0
-
+    unpause_source= None
     __computeDevice = "kek"
 
     __currentType = types.photo
@@ -94,8 +94,24 @@ class controller():
             self.source = cv2.VideoCapture(0, cv2.CAP_DSHOW)
             self.__currentType = 2
             return 0
+        elif src == 3: # shit for pause 
+            self.mutex_for_gui.lock()
+            self.selectType(1)
+            self.unpause_source = self.source
+            res, self.source = self.source.read()
+            self.__currentType = 1
+            self.mutex_for_gui.unlock()
+        elif src == 4: #shit for unpause
+            self.mutex_for_gui.lock()
+            self.selectType(2)
+                #print("video")
+            self.source = self.unpause_source
+            self.__currentType = 2
+            self.mutex_for_gui.unlock()
+
         else:
             return -1
+        
         
     point1 = None
     point2 = None    
@@ -104,64 +120,64 @@ class controller():
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
 
         shot = self.source
-        
+        if shot is not None:
         #height, width, channels = self.source.shape
         #print(height,width)
-       
-        if isinstance(self.source, cv2.VideoCapture):
-            ret, shot = self.source.read()
-        
+        #self.mutex_for_gui.lock()
+            if isinstance(self.source, cv2.VideoCapture):
+                ret, shot = self.source.read()
+            #self.mutex_for_gui.unlock()
 
-        try:
-            height, width, channels = shot.shape
-        except:
-            print('No image/video found')
-            black = QImage()
-            black.fill(QtCore.Qt.GlobalColor.black)
-            return black
-        
-
-        # if self.contrast >0:
-        #     print(self.contrast)
-        #     shot = cv2.addWeighted(shot , 1,np.zeros(shot.shape,shot.dtype),0,self.contrast)
+            try:
+                height, width, channels = shot.shape
+            except:
+                print('No image/video found')
+                black = QImage()
+                black.fill(QtCore.Qt.GlobalColor.black)
+                return black
             
-        #print(height, width)
-        self.mutex_for_gui.lock()
-        if isinstance(self.source, cv2.VideoCapture):
-            self.model.predict(ImageInput = self.source,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness)
-        else:
-            self.model.predict(ImageInput = shot,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness)
-        self.mutex_for_gui.unlock()
-        self.res = self.model.showLastShot()
-        # DRY KISS EXAMPLE
-        if self.point1:
-            cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
-        if self.point1 and self.point2:
-            cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
-            cv2.circle(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), 15, (0, 255, 0), -1)
-            cv2.line(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (255, 0, 0), 10)
-        if self.point1 and self.point2 and self.point3:
-            cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
-            cv2.circle(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), 15, (0, 255, 0), -1)
-            cv2.line(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (255, 0, 0), 10)
 
-            cv2.circle(self.res, (int(self.point3[0] * float(width/800)),int(self.point3[1] * float(height/600))), 15, (0, 255, 0), -1)
+            # if self.contrast >0:
+            #     print(self.contrast)
+            #     shot = cv2.addWeighted(shot , 1,np.zeros(shot.shape,shot.dtype),0,self.contrast)
+                
+            #print(height, width)
+            self.mutex_for_gui.lock()
+            if isinstance(self.source, cv2.VideoCapture):
+                self.model.predict(ImageInput = self.source,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness)
+            else:
+                self.model.predict(ImageInput = shot,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness)
+            self.mutex_for_gui.unlock()
+            self.res = self.model.showLastShot()
+            # DRY KISS EXAMPLE
+            if self.point1:
+                cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
+            if self.point1 and self.point2:
+                cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
+                cv2.circle(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), 15, (0, 255, 0), -1)
+                cv2.line(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (255, 0, 0), 10)
+            if self.point1 and self.point2 and self.point3:
+                cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
+                cv2.circle(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), 15, (0, 255, 0), -1)
+                cv2.line(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (255, 0, 0), 10)
+
+                cv2.circle(self.res, (int(self.point3[0] * float(width/800)),int(self.point3[1] * float(height/600))), 15, (0, 255, 0), -1)
+                
+                cv2.line(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (int(self.point3[0] * float(width/800)),int(self.point3[1] * float(height/600))), (0, 0, 255), 10)
+
+
+                self.xpixlength = ((int(self.point2[0] * float(width/800)) - int(self.point1[0] * float(width/800)))**2 + (int(self.point2[1] * float(height/600)) - int(self.point1[1] * float(height/600)))**2 )**0.5
+                self.ypixlength = ((int(self.point3[0] * float(width/800)) - int(self.point2[0] * float(width/800)))**2 + (int(self.point3[1] * float(height/600)) - int(self.point2[1] * float(height/600)))**2 )**0.5
+                
+                if self.xpixlength != 0 or self.ypixlength != 0:
+                    self.onepixdim = self.scale_value/self.xpixlength * self.scale_value/self.ypixlength
             
-            cv2.line(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (int(self.point3[0] * float(width/800)),int(self.point3[1] * float(height/600))), (0, 0, 255), 10)
+            h,w,ch = self.res.shape
+            bytes_per_line = ch*w
+            convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888).scaled(800,600)#,QtCore.Qt.AspectRatioMode.KeepAspectRatio)
 
-
-            self.xpixlength = ((int(self.point2[0] * float(width/800)) - int(self.point1[0] * float(width/800)))**2 + (int(self.point2[1] * float(height/600)) - int(self.point1[1] * float(height/600)))**2 )**0.5
-            self.ypixlength = ((int(self.point3[0] * float(width/800)) - int(self.point2[0] * float(width/800)))**2 + (int(self.point3[1] * float(height/600)) - int(self.point2[1] * float(height/600)))**2 )**0.5
-            
-            if self.xpixlength != 0 or self.ypixlength != 0:
-                self.onepixdim = self.scale_value/self.xpixlength * self.scale_value/self.ypixlength
+            return convert_to_Qt_format
         
-        h,w,ch = self.res.shape
-        bytes_per_line = ch*w
-        convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888).scaled(800,600)#,QtCore.Qt.AspectRatioMode.KeepAspectRatio)
-
-        return convert_to_Qt_format
-    
 
     def CountShot(self):
             classes:dict = self.kernel.kernel.names

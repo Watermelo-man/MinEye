@@ -29,6 +29,11 @@ class ThreadOpenCVVideo(QThread):
 
     def stop(self):
         self.status = False
-        cont.source.release()
+        if isinstance(cont.source, cv2.VideoCapture):
+            cont.source.release()
         cv2.destroyAllWindows()
         self.quit()
+
+
+
+ 

@@ -124,7 +124,7 @@ class VideoModel(Imodel):
     def apply_contrast(self,input_img, contrast = 1):
        # CLAHE (Contrast Limited Adaptive Histogram Equalization)
         clahe = cv2.createCLAHE(clipLimit=contrast, tileGridSize=(8,8))
-
+        
         lab = cv2.cvtColor(input_img, cv2.COLOR_BGR2LAB)  # convert from BGR to LAB color space
         l, a, b = cv2.split(lab)  # split on 3 different channels
 
@@ -133,7 +133,7 @@ class VideoModel(Imodel):
         lab = cv2.merge((l2,a,b))  # merge channels
         img2 = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)  # convert from LAB to BGR
         return img2
-
+       
     def apply_brightness(self,shot,brightness):
             shot = cv2.addWeighted(shot , 1,np.zeros(shot.shape,shot.dtype),0,brightness)
             return shot
