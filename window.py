@@ -19,6 +19,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         self.display.mousePressEvent = self.get_mouse_coords
         self.calc_scale_view_btn.setEnabled(False)
         self.calc_obj_size_btn.setEnabled(False)
+        self.scale_unit_size.setEnabled(False)
         self.brightness_slider.valueChanged.connect(self.brightness_change)
         self.contrast_slider.valueChanged.connect(self.change_contrast)
         self.accuracy_slider.valueChanged.connect(self.accuracy_change)
@@ -29,6 +30,8 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         self.SelectModelBox.currentTextChanged.connect(self.changeModel)
         self.camera_on.clicked.connect(self.cam)
         self.camera_off.clicked.connect(self.stop_cam)
+        self.scale_unit_size.textChanged.connect(self.change_scale)
+
 
     def changeModel(self):
         try:
@@ -68,7 +71,9 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             if Path(str(cont.path)).suffix in ['.mp4', '.flv', '.ts', '.mts', '.avi']:
                 if cont.source is not None:
                     self.calc_scale_view_btn.setEnabled(True)
+                    self.scale_unit_size.setEnabled(True)
                     self.calc_obj_size_btn.setEnabled(True)
+
                     self.StartButton.clicked.disconnect(self.start)
                     self.StartButton.setText("STOP")
                     self.thread_vid = ThreadOpenCVVideo()
@@ -86,6 +91,9 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
                 else:
                     raise AttributeError
             else:
+                self.calc_scale_view_btn.setEnabled(True)
+                self.scale_unit_size.setEnabled(True)
+                self.calc_obj_size_btn.setEnabled(True)
                 self.im = cont.analyseShot()
                 self.display.setPixmap(QPixmap.fromImage(self.im).scaled(800, 600))
                 self.display.show()
@@ -102,6 +110,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     def stop_video(self):
         try:
             self.calc_scale_view_btn.setEnabled(False)
+            self.scale_unit_size.setEnabled(False)
             self.calc_obj_size_btn.setEnabled(False)
             self.thread_vid.stop()
             self.thread_vid.changePixmap.disconnect(self.setImage)
@@ -170,6 +179,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     def cam(self):
         try:
             self.calc_scale_view_btn.setEnabled(True)
+            self.scale_unit_size.setEnabled(True)
             self.calc_obj_size_btn.setEnabled(True)
             self.camera_on.setStyleSheet("background-color: rgb(255, 255, 255);\n"
                                                "selection-background-color: rgb(0, 0, 0);\n"
@@ -206,6 +216,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.camera_off.setEnabled(False)
             self.camera_on.setEnabled(True)
             self.calc_scale_view_btn.setEnabled(False)
+            self.scale_unit_size.setEnabled(False)
             self.calc_obj_size_btn.setEnabled(False)
             self.StartButton.setEnabled(True)
             self.SelectFileButton.setEnabled(True)
@@ -347,3 +358,9 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if type(cont.model) == universal_model.modelType.PictureModel:
             self.setImage(cont.analyseShot())
+    
+    def change_scale(self,value):
+        if value != '':
+            value_flt=float(value)
+    
+            cont.change_scale(value_flt)

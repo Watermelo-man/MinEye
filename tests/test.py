@@ -1,24 +1,28 @@
-import torch
-import cv2
-from PIL import Image
+import sys
+from PyQt6.QtWidgets import QApplication, QWidget, QLineEdit, QVBoxLayout
 
-# Model
-#model = torch.hub.load('ultralytics/yolov5', "custom",'C:\Projects\orereco\ourmodels\onlygold.pt')
-model = torch.hub.load('C:\Projects\orereco\yolov5', 'custom', path='C:\Projects\orereco\ourmodels\onlygold.pt', source='local')  # local repo
-# Images
-imgs = Image.open('C:/Projects/orereco/source/0038.jpg')  # batch of images
+class TextEditExample(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
 
-# Inference
-results = model(imgs)
+    def initUI(self):
+        # Создаем поле с текстом (QLineEdit)
+        self.text_edit = QLineEdit(self)
+        self.text_edit.setPlaceholderText("Введите текст сюда")
+        self.text_edit.setText("1")
+        # Создаем вертикальное расположение виджетов
+        layout = QVBoxLayout()
+        layout.addWidget(self.text_edit)
 
-# Results
-results.show()
-#results.save()  # or .show()
+        # Устанавливаем размещение для главного окна
+        self.setLayout(layout)
 
-results.xyxy[0]  # img1 predictions (tensor)
-results.pandas().xyxy[0]  # img1 predictions (pandas)
-#      xmin    ymin    xmax   ymax  confidence  class    name
-# 0  749.50   43.50  1148.0  704.5    0.874023      0  person
-# 1  433.50  433.50   517.5  714.5    0.687988     27     tie
-# 2  114.75  195.75  1095.0  708.0    0.624512      0  person
-# 3  986.00  304.00  1028.0  420.0    0.286865     27     tie
+        self.setWindowTitle('Пример текстового поля')
+        self.setGeometry(100, 100, 300, 100)
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = TextEditExample()
+    ex.show()
+    sys.exit(app.exec())

@@ -284,7 +284,7 @@ class Ui_MainWindow():
 
         #Calculate scale view button
         self.calc_scale_view_btn = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.calc_scale_view_btn.setGeometry(QtCore.QRect(840, 300, 411, 41))
+        self.calc_scale_view_btn.setGeometry(QtCore.QRect(840, 300, 311, 41))
         font = QtGui.QFont()
         font.setFamily("HelveticaNowDisplay Bold")
         font.setPointSize(10)
@@ -297,6 +297,37 @@ class Ui_MainWindow():
         self.calc_scale_view_btn.setObjectName("calc_scale_view_btn")
 
 
+        #scale unit size
+        self.scale_unit_size = QtWidgets.QLineEdit(self)
+        self.scale_unit_size.setGeometry(QtCore.QRect(1170, 300, 75, 41))
+
+        font = QtGui.QFont()
+        font.setFamily("HelveticaNowDisplay Bold")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(90)
+        self.scale_unit_size.setFont(font)
+        self.scale_unit_size.setAutoFillBackground(False)
+       # self.scale_unit_size.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        #self.scale_unit_size.setLineWidth(1)
+        
+
+       
+
+
+
+        self.scale_unit_size.setStyleSheet("background-color: rgb(126, 126, 126);\n"
+                                             "selection-background-color: rgb(0, 0, 0);\n"
+                                             "gridline-color: rgb(0, 0, 0);")
+        self.scale_unit_size.setPlaceholderText("Scale (mm)")
+        regexpvalid = QtCore.QRegularExpression("^(?:\d+\.\d+|\d+)$")
+        double_validator = QtGui.QRegularExpressionValidator(regexpvalid)
+       
+        self.scale_unit_size.setValidator(double_validator)
+
+
+
+
         #Calculate object size
         self.calc_obj_size_btn = QtWidgets.QPushButton(parent=self.centralwidget)
         self.calc_obj_size_btn.setGeometry(QtCore.QRect(840, 350, 411, 41))
@@ -306,11 +337,19 @@ class Ui_MainWindow():
         font.setBold(True)
         font.setWeight(75)
         self.calc_obj_size_btn.setFont(font)
+
+
+        
+
+
+
         self.calc_obj_size_btn.setStyleSheet("background-color: rgb(126, 126, 126);\n"
                                              "selection-background-color: rgb(0, 0, 0);\n"
                                              "gridline-color: rgb(0, 0, 0);")
         self.calc_obj_size_btn.setObjectName("calc_obj_size_btn")
-
+        
+        
+       # self.calc_obj_size_btn.setObjectName("calc_obj_size_btn")
 
         #Turn on camera
         self.camera_on = QtWidgets.QPushButton(parent=self.centralwidget)

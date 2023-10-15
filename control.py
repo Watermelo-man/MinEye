@@ -33,6 +33,8 @@ class controller():
     confidence = 0.5
     brightness = 0
     unpause_source= None
+    xpixlength_mem = None
+    ypixlength_mem = None
     __computeDevice = "kek"
 
     __currentType = types.photo
@@ -171,7 +173,8 @@ class controller():
                 
                 if self.xpixlength != 0 or self.ypixlength != 0:
                     self.onepixdim = self.scale_value/self.xpixlength * self.scale_value/self.ypixlength
-            
+                    self.xpixlength_mem = self.xpixlength
+                    self.ypixlength_mem = self.ypixlength
             h,w,ch = self.res.shape
             bytes_per_line = ch*w
             convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888).scaled(800,600)#,QtCore.Qt.AspectRatioMode.KeepAspectRatio)
@@ -262,6 +265,12 @@ class controller():
         self.point3 = coords    
         self.mutex_for_gui.unlock()
 
+    def change_scale(self,value):
+        self.scale_value = value
+        if self.xpixlength_mem is not None and self.ypixlength_mem is not None:
+            self.onepixdim = self.scale_value/self.xpixlength_mem * self.scale_value/self.ypixlength_mem
+               
+        #print(self.scale_value)
 
 
 cont = controller()
