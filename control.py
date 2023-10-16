@@ -35,6 +35,11 @@ class controller():
     unpause_source= None
     xpixlength_mem = None
     ypixlength_mem = None
+
+    point1 = None
+    point2 = None    
+    point3 = None
+
     __computeDevice = "kek"
 
     __currentType = types.photo
@@ -115,9 +120,11 @@ class controller():
             return -1
         
         
-    point1 = None
-    point2 = None    
-    point3 = None
+    
+
+
+    
+
 
     def analyseShot(self):#(model:universal_model.modelType.Imodel = md,im = im):
 
@@ -130,6 +137,7 @@ class controller():
                 ret, shot = self.source.read()
             #self.mutex_for_gui.unlock()
 
+                
             try:
                 height, width, channels = shot.shape
             except:
@@ -151,6 +159,7 @@ class controller():
                 self.model.predict(ImageInput = shot,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness)
             self.mutex_for_gui.unlock()
             self.res = self.model.showLastShot()
+            height, width, channels = self.res.shape
             # DRY KISS EXAMPLE
             if self.point1:
                 cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)

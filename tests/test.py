@@ -1,28 +1,25 @@
-import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QLineEdit, QVBoxLayout
+import cv2
 
-class TextEditExample(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.initUI()
+def resize_image(input_image_path, target_width=1024):
+    # Загрузка изображения
+    image = cv2.imread(input_image_path)
+    
+    # Получение исходных размеров изображения
+    height, width, _ = image.shape
 
-    def initUI(self):
-        # Создаем поле с текстом (QLineEdit)
-        self.text_edit = QLineEdit(self)
-        self.text_edit.setPlaceholderText("Введите текст сюда")
-        self.text_edit.setText("1")
-        # Создаем вертикальное расположение виджетов
-        layout = QVBoxLayout()
-        layout.addWidget(self.text_edit)
+    # Вычисление новой высоты с сохранением соотношения сторон
+    new_height = int(height * (target_width / width))
 
-        # Устанавливаем размещение для главного окна
-        self.setLayout(layout)
+    # Изменение размера изображения
+    resized_image = cv2.resize(image, (target_width, new_height))
 
-        self.setWindowTitle('Пример текстового поля')
-        self.setGeometry(100, 100, 300, 100)
+    # Сохранение измененного изображения
+   # cv2.imwrite(output_image_path, resized_image)
+    cv2.imshow('orig',image)
+    cv2.imshow("res",resized_image)
+    cv2.waitKey(0)
+if __name__ == "__main__":
+    input_image_path = 'C:\\Projects\\orereco\\source\\0010.jpg'  # Укажите путь к вашему изображению
+    #output_image_path = 'измененное_изображение.jpg'   # Укажите путь для сохранения измененного изображения
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = TextEditExample()
-    ex.show()
-    sys.exit(app.exec())
+    resize_image(input_image_path)

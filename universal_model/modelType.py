@@ -43,6 +43,20 @@ class PictureModel(Imodel):
         self.compute_type = ker.mode_type
 
 
+    def resize_image(self,image, target_width=1024):
+        # Загрузка изображения
+        
+        
+        # Получение исходных размеров изображения
+        height, width, _ = image.shape
+
+        # Вычисление новой высоты с сохранением соотношения сторон
+        new_height = int(height * (target_width / width))
+
+        # Изменение размера изображения
+        resized_image = cv2.resize(image, (target_width, new_height))
+        return resized_image
+
     def apply_contrast(self,input_img, contrast = 1):
        # CLAHE (Contrast Limited Adaptive Histogram Equalization)
         clahe = cv2.createCLAHE(clipLimit=contrast, tileGridSize=(8,8))
@@ -67,6 +81,8 @@ class PictureModel(Imodel):
         #     pass
         # else:
         #     raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
+        ImageInput = self.resize_image(ImageInput)
+
         self.contrast = contrast
         self.confidence = confCoef
         self.brightness = brightness
@@ -121,6 +137,22 @@ class VideoModel(Imodel):
         self.Kernel=ker.kernel
         self.compute_type = ker.mode_type
 
+
+    def resize_image(self,image, target_width=1024):
+        # Загрузка изображения
+        
+        
+        # Получение исходных размеров изображения
+        height, width, _ = image.shape
+
+        # Вычисление новой высоты с сохранением соотношения сторон
+        new_height = int(height * (target_width / width))
+
+        # Изменение размера изображения
+        resized_image = cv2.resize(image, (target_width, new_height))
+        return resized_image
+
+
     def apply_contrast(self,input_img, contrast = 1):
        # CLAHE (Contrast Limited Adaptive Histogram Equalization)
         clahe = cv2.createCLAHE(clipLimit=contrast, tileGridSize=(8,8))
@@ -154,6 +186,8 @@ class VideoModel(Imodel):
         #self.Kernel.iou = IoU
         
         ret, shot = ImageInput.read()
+
+        shot = self.resize_image(shot)
 
         if self.brightness != 0:
             shot = self.apply_brightness(shot,self.brightness)

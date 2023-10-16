@@ -41,22 +41,24 @@ class kernel():
 
             if self.mode_type == None:
                 if torch.cuda.is_available():
-                    
-                    answ = input('There is some CUDA, do you want to use it?(Y/N)')
-                    if answ == 'Y':
-                        self.mode_type = 'cuda'
-                        model = YOLO(model_path)
-                        #model = model.export()
-                        self.kernel = model#torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True).cuda()
-                        #self.kernel
-                        print("CUDA MODE")
-                    else:
-                        self.mode_type = 'cpu'
-                        model = YOLO(model_path)
-                        #model = model.export(format = 'ONNX')
-                        #model = model.export()
-                        self.kernel = model#torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True).cpu()   
-                        print("CPU MODE")
+                    while True:
+                        answ = input('There is some CUDA, do you want to use it?(Y/N)')
+                        if answ == 'Y':
+                            self.mode_type = 'cuda'
+                            model = YOLO(model_path)
+                            #model = model.export()
+                            self.kernel = model#torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True).cuda()
+                            #self.kernel
+                            print("CUDA MODE")
+                            break
+                        elif answ == 'N':
+                            self.mode_type = 'cpu'
+                            model = YOLO(model_path)
+                            #model = model.export(format = 'ONNX')
+                            #model = model.export()
+                            self.kernel = model#torch.hub.load(yolodir, 'custom', path = model_path, source='local', force_reload=True).cpu()   
+                            print("CPU MODE")
+                            break
                 else:
                     self.mode_type = 'cpu'
                     model = YOLO(model_path)

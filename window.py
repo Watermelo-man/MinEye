@@ -362,5 +362,4 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     def change_scale(self,value):
         if value != '':
             value_flt=float(value)
-    
             cont.change_scale(value_flt)
