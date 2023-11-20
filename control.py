@@ -130,6 +130,7 @@ class controller():
 
         shot = self.source
         if shot is not None:
+            #print('shot:', type(shot))
         #height, width, channels = self.source.shape
         #print(height,width)
         #self.mutex_for_gui.lock()
@@ -206,6 +207,9 @@ class controller():
                 return classes_count
             else:
                 return None
+            
+
+    
 
     def CountSquare(self,classes_in_shot:dict):
         classes:dict = self.kernel.kernel.names
@@ -243,6 +247,53 @@ class controller():
             print('No masks or boxes found')
             return None
         
+
+    def CountSquareDetailed(self,classes_in_shot:dict):
+        classes:dict = self.kernel.kernel.names
+        #print(classes)
+        inv_classes = dict((v, k) for k, v in classes.items())
+        result = dict()
+        try:
+            pic = self.model.showLastShot()
+            width = len(pic[0])
+            height = len(pic)
+            boxes = self.model.showLastResult()
+            masks = self.model.showLastSizes()
+        except:
+            print('No model found')
+            return None
+        
+        if boxes!=None and masks!=None:
+            clss = boxes[:, 5]
+            exist_keys = list(classes_in_shot.keys())
+
+            for key in exist_keys:
+                item_indicies = torch.where(clss == inv_classes[key])
+
+                #print(key)
+                result[key]=dict()
+                for ind in item_indicies[0]:
+                    current_min = int(ind)
+                    item_masks = masks[[(current_min,),]]
+                    item_mask = torch.any(item_masks,dim = 0).int() * 255
+                    image_mask = item_mask.cpu().numpy().astype('uint8')
+                    image_mask = cv2.resize(image_mask,(width,height))
+
+                    cntw = cv2.countNonZero(image_mask)
+                    if self.onepixdim == 0:
+                        #result[key] = cntw
+                        result[key][current_min]=cntw
+                        #print('pix', cntw)
+                    else:
+                        #print('mm', cntw* self.onepixdim)
+                        #result[key] = cntw * self.onepixdim
+                         result[key][current_min]=cntw* self.onepixdim
+            #print(result)
+            return result
+        else:
+            print('No masks or boxes found')
+            return None
+
 
     def change_confidence(self,value):
         self.mutex_for_gui.lock()

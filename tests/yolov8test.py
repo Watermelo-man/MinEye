@@ -7,9 +7,9 @@ model = YOLO('ourmodels/yolov8n-seg.pt')  # pretrained YOLOv8n model
 classes = model.names
 print(classes)
 # Run batched inference on a list of images
-results = model('source/7c98d4e3207fa8b44c42122ca7da455f.jpg')  # return a list of Results objects
+results = model('source/bottle.jpg')  # return a list of Results objects
 
-image = cv2.imread('source/7c98d4e3207fa8b44c42122ca7da455f.jpg')
+image = cv2.imread('source/bottle.jpg')
 height, width, channels = image.shape
 print(height,width)
 print()
@@ -23,14 +23,22 @@ for result in results:
     boxes = result.boxes.data
     # extract classes
 
-    print( result.masks.data)
+    #print( result.masks.data)
     clss = boxes[:, 5]
-    print (clss)
+    #print (clss)
     # get indices of results where class is 0 (people in COCO)
     people_indices = torch.where(clss == 39)
+    print(people_indices)
+    print(people_indices[0][1])
+    for ind in people_indices[0]:
+        print(int(ind))
+   # print(people_indices[1])
     # use these indices to extract the relevant masks
-    people_masks = masks[people_indices]
-    print(type(people_masks))
+    people_masks = masks[[(1,),]]
+
+    #people_masks = masks[[(people_indices[0][0])]]
+
+    #print(type(people_masks))
         # scale for visualizing results
     people_mask = torch.any(people_masks,dim = 0).int() * 255
 
@@ -59,14 +67,19 @@ for result in results:
     cv2.imshow('pidor',lol)
     #cv2.imshow('pidor2',results)
     cv2.waitKey(0)
-    
+'''
 # Process results list
+i = 0
 for result in results:
+    i+=1
     boxes = result.boxes  # Boxes object for bbox outputs
     masks = result.masks  # Masks object for segmentation masks outputs
     keypoints = result.keypoints  # Keypoints object for pose outputs
     probs = result.probs  # Class probabilities for classification outputs
-print(masks)
-res_plotted = results[0].plot()
-cv2.imshow("result", res_plotted)
+#   print(masks)
+    #res_plotted = results[0].plot()
+    for mask in masks:
+        res_plotted = mask.plot()        
+        cv2.imshow(f"result{i}", res_plotted)
 cv2.waitKey(0)
+'''

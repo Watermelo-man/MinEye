@@ -23,7 +23,7 @@ class Ui_MainWindow():
         pass
     
     def setupUi(self, MainWindow):
-
+        
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1280, 720)
         MainWindow.setStyleSheet("background-color: rgb(91, 91, 91);")
@@ -330,7 +330,7 @@ class Ui_MainWindow():
 
         #Calculate object size
         self.calc_obj_size_btn = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.calc_obj_size_btn.setGeometry(QtCore.QRect(840, 350, 411, 41))
+        self.calc_obj_size_btn.setGeometry(QtCore.QRect(840, 350, 311, 41))#411
         font = QtGui.QFont()
         font.setFamily("HelveticaNowDisplay Bold")
         font.setPointSize(10)
@@ -338,8 +338,14 @@ class Ui_MainWindow():
         font.setWeight(75)
         self.calc_obj_size_btn.setFont(font)
 
-
-        
+        self.detailed_report = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.detailed_report.setGeometry(QtCore.QRect(1170, 350, 75, 41))
+        font = QtGui.QFont()
+        font.setFamily("HelveticaNowDisplay Bold")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.detailed_report.setFont(font)
 
 
 
@@ -400,7 +406,7 @@ class Ui_MainWindow():
     #Rename elements on the interface
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("LolWindow", "Orereco"))
+        MainWindow.setWindowTitle(_translate("LolWindow", "MinEYE"))
         self.StartButton.setText(_translate("MainWindow", "START"))
         self.pause.setText(_translate("MainWindow", "PAUSE"))     
         self.FileModelPanel.setText(_translate("MainWindow", "Select Model:"))
@@ -412,3 +418,4 @@ class Ui_MainWindow():
         self.calc_obj_size_btn.setText(_translate("MainWindow", "Calculate size of objects"))
         self.camera_on.setText(_translate("MainWindow", "Switch the camera on"))
         self.camera_off.setText(_translate("MainWindow", "Switch the camera off"))
+        self.detailed_report.setText(_translate("MainWindow", "Report"))

@@ -97,9 +97,9 @@ class PictureModel(Imodel):
         #ImageInput = cv2.cvtColor(ImageInput, cv2.COLOR_BGR2RGB)
 
         if self.compute_type == 'cpu':
-            self.last_result = self.Kernel(ImageInput,verbose = False,device="cpu",conf = self.confidence)#,size)
+            self.last_result = self.Kernel.predict(ImageInput,verbose = False,device="cpu",conf = self.confidence)#,size)
         if self.compute_type == 'cuda':
-            self.last_result = self.Kernel(ImageInput,verbose = False,device=0,conf = self.confidence)
+            self.last_result = self.Kernel.predict(ImageInput,verbose = False,device=0,conf = self.confidence)
 
     def showLastShot(self):
         if self.last_result != None:
@@ -143,8 +143,9 @@ class VideoModel(Imodel):
         
         
         # Получение исходных размеров изображения
+        #print('image', type(image))
         height, width, _ = image.shape
-
+        
         # Вычисление новой высоты с сохранением соотношения сторон
         new_height = int(height * (target_width / width))
 
@@ -200,9 +201,9 @@ class VideoModel(Imodel):
         
 
         if self.compute_type == 'cpu':
-            self.last_result = self.Kernel(shot,verbose = False,device = "cpu",conf = self.confidence)
+            self.last_result = self.Kernel.predict(shot,verbose = False,device = "cpu",conf = self.confidence)
         if self.compute_type == 'cuda':
-            self.last_result = self.Kernel(shot,verbose = False,device = 0,conf = self.confidence)
+            self.last_result = self.Kernel.predict(shot,verbose = False,device = 0,conf = self.confidence)
 
     def showLastShot(self):
         if self.last_result != None:

@@ -1,5 +1,6 @@
 from gui import *
 from threads import ThreadOpenCV, ThreadOpenCVVideo
+import gui_report
 import time
 import os
 
@@ -31,7 +32,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         self.camera_on.clicked.connect(self.cam)
         self.camera_off.clicked.connect(self.stop_cam)
         self.scale_unit_size.textChanged.connect(self.change_scale)
-
+        self.detailed_report.clicked.connect(self.report)
 
     def changeModel(self):
         try:
@@ -55,6 +56,9 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     def open(self):
         try:
             cont.selectSource(1)
+            # self.accuracy_slider.setEnabled(True)
+            # self.contrast_slider.setEnabled(True)
+            # self.brightness_slider.setEnabled(True)
         except Exception as e:
             print(e)
             error = QtWidgets.QMessageBox()
@@ -85,12 +89,18 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.SelectFileButton.setEnabled(False)
                     self.camera_off.setEnabled(False)
                     self.camera_on.setEnabled(False)
+                    self.accuracy_slider.setEnabled(True)
+                    self.contrast_slider.setEnabled(True)
+                    self.brightness_slider.setEnabled(True)
                     #self.pause.clicked.connect(self.pause_video)
 
                     
                 else:
                     raise AttributeError
             else:
+                self.accuracy_slider.setEnabled(True)
+                self.contrast_slider.setEnabled(True)
+                self.brightness_slider.setEnabled(True)
                 self.calc_scale_view_btn.setEnabled(True)
                 self.scale_unit_size.setEnabled(True)
                 self.calc_obj_size_btn.setEnabled(True)
@@ -120,6 +130,9 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.StartButton.clicked.disconnect(self.stop_video)
             self.StartButton.clicked.connect(self.start)
             self.StartButton.setText("START")
+            self.accuracy_slider.setEnabled(False)
+            self.contrast_slider.setEnabled(False)
+            self.brightness_slider.setEnabled(False)
             try:
                 self.pause.clicked.disconnect(self.continue_video)
                 self.pause.setText("PAUSE")
@@ -144,8 +157,6 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.pause.clicked.connect(self.continue_video)
             self.pause_flag = True
             cont.selectSource(3)
-
-            #cont.source = cont.source.read()
             cont.selectType(1)
         except:
             error = QtWidgets.QMessageBox()
@@ -192,6 +203,9 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.camera_off.setEnabled(True)
             self.camera_on.setEnabled(False)
             self.StartButton.setEnabled(False)
+            self.accuracy_slider.setEnabled(True)
+            self.contrast_slider.setEnabled(True)
+            self.brightness_slider.setEnabled(True)
             #self.pushButton.setEnabled(False)
         except:
             error = QtWidgets.QMessageBox()
@@ -205,9 +219,6 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     #Camera and thread stop
     def stop_cam(self):
         try:
-            
-           
-            
             self.thread_cam.stop()
             self.thread_cam.changePixmap.disconnect(self.setImage)
             del self.thread_cam
@@ -220,6 +231,9 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.calc_obj_size_btn.setEnabled(False)
             self.StartButton.setEnabled(True)
             self.SelectFileButton.setEnabled(True)
+            self.accuracy_slider.setEnabled(False)
+            self.contrast_slider.setEnabled(False)
+            self.brightness_slider.setEnabled(False)
             self.camera_on.setStyleSheet("background-color: rgb(126, 126, 126);\n"
                                                "selection-background-color: rgb(0, 0, 0);\n"
                                                "gridline-color: rgb(0, 0, 0);")
@@ -324,6 +338,14 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.size_table.setItem(cnt, 1, item)
                 cnt+=1
 
+
+    def report(self):
+        mineralCntDict = cont.CountShot()
+        if mineralCntDict != None:
+            cont.CountSquareDetailed(mineralCntDict)
+            self.rep = gui_report.AnotherWindow()
+            self.rep.show_table()
+            self.rep.show()
 
     def accuracy_change(self,value):
         self.accuracy_num_label.setText(str(value/100))
