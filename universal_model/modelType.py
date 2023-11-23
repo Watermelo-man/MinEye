@@ -38,6 +38,7 @@ class PictureModel(Imodel):
     compute_type = None
     contrast = 0
     brightness = 0
+    IOU = 0.7
     def __init__(self, ker:kernel.kernel):
         self.Kernel=ker.kernel
         self.compute_type = ker.mode_type
@@ -75,12 +76,13 @@ class PictureModel(Imodel):
         shot = cv2.addWeighted(shot , 1,np.zeros(shot.shape,shot.dtype),0,brightness)
         return shot
         
-    def predict(self, ImageInput, confCoef:float = 0.5,contrast:float = 0,brightness:float=0):# IoU:float = 0.5):
+    def predict(self, ImageInput, confCoef:float = 0.5,contrast:float = 0,brightness:float=0,IoU_change:float = 0.7):# IoU:float = 0.5):
         #print("pic")
         # if isinstance(ImageInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
         #     pass
         # else:
         #     raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
+        self.IOU = IoU_change
         ImageInput = self.resize_image(ImageInput)
 
         self.contrast = contrast
@@ -97,9 +99,9 @@ class PictureModel(Imodel):
         #ImageInput = cv2.cvtColor(ImageInput, cv2.COLOR_BGR2RGB)
 
         if self.compute_type == 'cpu':
-            self.last_result = self.Kernel.predict(ImageInput,verbose = False,device="cpu",conf = self.confidence)#,size)
+            self.last_result = self.Kernel.predict(ImageInput,verbose = False,device="cpu",conf = self.confidence,iou = self.IOU)#,size)
         if self.compute_type == 'cuda':
-            self.last_result = self.Kernel.predict(ImageInput,verbose = False,device=0,conf = self.confidence)
+            self.last_result = self.Kernel.predict(ImageInput,verbose = False,device=0,conf = self.confidence,iou = self.IOU)
 
     def showLastShot(self):
         if self.last_result != None:
@@ -133,6 +135,7 @@ class VideoModel(Imodel):
     last_result=None
     Kernel = None
     compute_type = None
+    IOU = 0.7
     def __init__(self, ker:kernel.kernel):
         self.Kernel=ker.kernel
         self.compute_type = ker.mode_type
@@ -171,7 +174,7 @@ class VideoModel(Imodel):
             shot = cv2.addWeighted(shot , 1,np.zeros(shot.shape,shot.dtype),0,brightness)
             return shot
 
-    def predict(self, ImageInput:cv2.VideoCapture, confCoef:float = 0.5,contrast:float = 0,brightness=0 ):#, IoU:float = 0.5):
+    def predict(self, ImageInput:cv2.VideoCapture, confCoef:float = 0.5,contrast:float = 0,brightness=0,IoU_change:float = 0.7 ):#, IoU:float = 0.5):
         """"
         #make check for cv camera
         if isinstance(ViedoInput, PIL.JpegImagePlugin.JpegImageFile) or isinstance(ImageInput, PIL.PngImagePlugin.PngImageFile):
@@ -180,6 +183,7 @@ class VideoModel(Imodel):
         else:
             raise TypeError("Wrong type of Image, use only PIL Image Or cv2 ndarray")
         """
+        self.IOU = IoU_change
         self.contrast = contrast
         self.confidence = confCoef
         self.brightness = brightness
@@ -201,9 +205,9 @@ class VideoModel(Imodel):
         
 
         if self.compute_type == 'cpu':
-            self.last_result = self.Kernel.predict(shot,verbose = False,device = "cpu",conf = self.confidence)
+            self.last_result = self.Kernel.predict(shot,verbose = False,device = "cpu",conf = self.confidence,iou = self.IOU)
         if self.compute_type == 'cuda':
-            self.last_result = self.Kernel.predict(shot,verbose = False,device = 0,conf = self.confidence)
+            self.last_result = self.Kernel.predict(shot,verbose = False,device = 0,conf = self.confidence,iou = self.IOU)
 
     def showLastShot(self):
         if self.last_result != None:

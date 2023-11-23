@@ -32,6 +32,7 @@ class controller():
     contrast = 1
     confidence = 0.5
     brightness = 0
+    IOU_value = 0.7
     unpause_source= None
     xpixlength_mem = None
     ypixlength_mem = None
@@ -155,9 +156,9 @@ class controller():
             #print(height, width)
             self.mutex_for_gui.lock()
             if isinstance(self.source, cv2.VideoCapture):
-                self.model.predict(ImageInput = self.source,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness)
+                self.model.predict(ImageInput = self.source,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness,IoU_change = self.IOU_value)
             else:
-                self.model.predict(ImageInput = shot,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness)
+                self.model.predict(ImageInput = shot,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness,IoU_change = self.IOU_value)
             self.mutex_for_gui.unlock()
             self.res = self.model.showLastShot()
             height, width, channels = self.res.shape
@@ -326,11 +327,14 @@ class controller():
         self.mutex_for_gui.unlock()
 
     def change_scale(self,value):
+        self.mutex_for_gui.lock()
         self.scale_value = value
         if self.xpixlength_mem is not None and self.ypixlength_mem is not None:
             self.onepixdim = self.scale_value/self.xpixlength_mem * self.scale_value/self.ypixlength_mem
-               
+        self.mutex_for_gui.unlock()       
         #print(self.scale_value)
-
-
+    def change_IOU(self,value):
+        self.mutex_for_gui.lock()
+        self.IOU_value = value
+        self.mutex_for_gui.unlock()
 cont = controller()

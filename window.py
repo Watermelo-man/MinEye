@@ -33,7 +33,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         self.camera_off.clicked.connect(self.stop_cam)
         self.scale_unit_size.textChanged.connect(self.change_scale)
         self.detailed_report.clicked.connect(self.report)
-
+        self.IOU_slider.valueChanged.connect(self.IOU_change)
     def changeModel(self):
         try:
             if self.thread_cam != None:
@@ -385,3 +385,9 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         if value != '':
             value_flt=float(value)
             cont.change_scale(value_flt)
+
+    def IOU_change(self,value):
+        self.IOU_num_label.setText(str(value/100))
+        cont.change_IOU(value/100)
+        if type(cont.model) == universal_model.modelType.PictureModel:
+            self.setImage(cont.analyseShot())

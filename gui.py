@@ -121,7 +121,7 @@ class Ui_MainWindow():
 
         #Contrast label
         self.contrast_big_label = QtWidgets.QLabel(parent=self.centralwidget)
-        self.contrast_big_label.setGeometry(QtCore.QRect(830, 20, 431, 601))
+        self.contrast_big_label.setGeometry(QtCore.QRect(830, 10, 431, 601))
         font = QtGui.QFont()
         font.setFamily("HelveticaNowDisplay Bold")
         font.setPointSize(14)
@@ -134,10 +134,10 @@ class Ui_MainWindow():
         self.contrast_big_label.setObjectName("contrast_big_label")
 
 
-        #Sharpness label
+        #Brightness label
         self.brigtness_label = QtWidgets.QLabel(parent=self.centralwidget)
         self.brigtness_label.setEnabled(True)
-        self.brigtness_label.setGeometry(QtCore.QRect(835, 110, 111, 25))
+        self.brigtness_label.setGeometry(QtCore.QRect(835, 85, 111, 25))
         font = QtGui.QFont()
         font.setFamily("HelveticaNowDisplay Bold")
         font.setPointSize(14)
@@ -153,7 +153,7 @@ class Ui_MainWindow():
         #Accuracy label
         self.accuracy_label = QtWidgets.QLabel(parent=self.centralwidget)
         self.accuracy_label.setEnabled(True)
-        self.accuracy_label.setGeometry(QtCore.QRect(835, 200, 90, 21))
+        self.accuracy_label.setGeometry(QtCore.QRect(840, 157, 90, 21))
         font = QtGui.QFont()
         font.setFamily("HelveticaNowDisplay Bold")
         font.setPointSize(14)
@@ -165,10 +165,24 @@ class Ui_MainWindow():
         self.accuracy_label.setLineWidth(1)
         self.accuracy_label.setObjectName("accuracy_label")
 
+        #IOU label
+        self.IOU_label = QtWidgets.QLabel(parent=self.centralwidget)
+        self.IOU_label.setEnabled(True)
+        self.IOU_label.setGeometry(QtCore.QRect(840, 230, 90, 21))
+        font = QtGui.QFont()
+        font.setFamily("HelveticaNowDisplay Bold")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(90)
+        self.IOU_label.setFont(font)
+        self.IOU_label.setAutoFillBackground(False)
+        self.IOU_label.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        self.IOU_label.setLineWidth(1)
+        self.IOU_label.setObjectName("IOU_label")
 
         #Contrast slider
         self.contrast_slider = QtWidgets.QSlider(parent=self.centralwidget)
-        self.contrast_slider.setGeometry(QtCore.QRect(840, 50, 311, 41))
+        self.contrast_slider.setGeometry(QtCore.QRect(840, 40, 311, 30))
         self.contrast_slider.setStyleSheet("background-color: rgb(105, 105, 105);")
         self.contrast_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.contrast_slider.setObjectName("contrast_slider")
@@ -176,7 +190,7 @@ class Ui_MainWindow():
         self.contrast_slider.setSingleStep(1)
         #contrast label
         self.contrast_num_label = QtWidgets.QLabel(parent=self.centralwidget)
-        self.contrast_num_label.setGeometry(QtCore.QRect(1170, 50, 75, 41))
+        self.contrast_num_label.setGeometry(QtCore.QRect(1170, 40, 75, 30))
         self.contrast_num_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         font = QtGui.QFont()
         font.setFamily("HelveticaNowDisplay Bold")
@@ -193,14 +207,14 @@ class Ui_MainWindow():
 
         #brightness slider
         self.brightness_slider = QtWidgets.QSlider(parent=self.centralwidget)
-        self.brightness_slider.setGeometry(QtCore.QRect(840, 140, 311, 41))
+        self.brightness_slider.setGeometry(QtCore.QRect(840, 115, 311, 30))
         self.brightness_slider.setStyleSheet("background-color: rgb(105, 105, 105);")
         self.brightness_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.brightness_slider.setObjectName("sharpness_slider")
         self.brightness_slider.setRange(-200,200)
         #brightness label
         self.brightness_num_label = QtWidgets.QLabel(parent=self.centralwidget)
-        self.brightness_num_label.setGeometry(QtCore.QRect(1170, 140, 75, 41))
+        self.brightness_num_label.setGeometry(QtCore.QRect(1170, 115, 75, 30))
         self.brightness_num_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         font = QtGui.QFont()
         font.setFamily("HelveticaNowDisplay Bold")
@@ -218,7 +232,7 @@ class Ui_MainWindow():
         #Accuracy slider
         self.accuracy_slider = QtWidgets.QSlider(parent=self.centralwidget)
         
-        self.accuracy_slider.setGeometry(QtCore.QRect(840, 230, 311, 41))
+        self.accuracy_slider.setGeometry(QtCore.QRect(842, 185, 311, 30))
         self.accuracy_slider.setStyleSheet("background-color: rgb(105, 105, 105);")
         self.accuracy_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.accuracy_slider.setObjectName("accuracy_slider")
@@ -229,7 +243,7 @@ class Ui_MainWindow():
 
 
         self.accuracy_num_label = QtWidgets.QLabel(parent=self.centralwidget)
-        self.accuracy_num_label.setGeometry(QtCore.QRect(1170, 230, 75, 41))
+        self.accuracy_num_label.setGeometry(QtCore.QRect(1170, 185, 75, 30))
         self.accuracy_num_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         font = QtGui.QFont()
         font.setFamily("HelveticaNowDisplay Bold")
@@ -243,17 +257,36 @@ class Ui_MainWindow():
         self.accuracy_num_label.setObjectName("accuracy_big_label")
         self.accuracy_num_label.setText('0.5')
 
-        # self.accuracy_num_label = QtWidgets.QLabel(parent=self.centralwidget)
-        # self.accuracy_num_label.setFont(font)
-        # self.accuracy_num_label.setGeometry(QtCore.QRect(1281, 230, 311, 41))
-        # self.accuracy_num_label.setStyleSheet("background-color: rgb(105, 105, 105);")
-        # self.accuracy_num_label.setObjectName("accuracy_label")
-        # self.accuracy_num_label.setText('0.5')
-        '''
-        self.label = QtWidgets.QLabel("GUI Applications with PyQt6", self)
-        self.label.setStyleSheet("background-color: rgb(105, 105, 105);")
-        self.label.move(840, 500)
-        '''
+        
+        #IOU slider
+        self.IOU_slider = QtWidgets.QSlider(parent=self.centralwidget)
+        
+        self.IOU_slider.setGeometry(QtCore.QRect(842, 255, 311, 30))
+        self.IOU_slider.setStyleSheet("background-color: rgb(105, 105, 105);")
+        self.IOU_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
+        self.IOU_slider.setObjectName("IOU_slider")
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.IOU_slider.setRange(1,100)
+        self.IOU_slider.setSingleStep(1)
+        self.IOU_slider.setValue(70)
+
+
+        self.IOU_num_label = QtWidgets.QLabel(parent=self.centralwidget)
+        self.IOU_num_label.setGeometry(QtCore.QRect(1170, 255, 75, 30))
+        self.IOU_num_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        font = QtGui.QFont()
+        font.setFamily("HelveticaNowDisplay Bold")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.IOU_num_label.setFont(font)
+        self.IOU_num_label.setStyleSheet("gridline-color: rgb(0, 0, 0);")
+        self.IOU_num_label.setFrameShape(QtWidgets.QFrame.Shape.Panel)
+        
+        self.IOU_num_label.setObjectName("accuracy_big_label")
+        self.IOU_num_label.setText('0.7')
+        
+   
         #Count table
         self.count_table = QtWidgets.QTableWidget(self)
         #table.move(840, 400)
@@ -419,3 +452,4 @@ class Ui_MainWindow():
         self.camera_on.setText(_translate("MainWindow", "Switch the camera on"))
         self.camera_off.setText(_translate("MainWindow", "Switch the camera off"))
         self.detailed_report.setText(_translate("MainWindow", "Report"))
+        self.IOU_label.setText(_translate("MainWindow","IoU"))
