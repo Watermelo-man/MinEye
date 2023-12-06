@@ -149,18 +149,17 @@ class controller():
                 return black
             
 
-            # if self.contrast >0:
-            #     print(self.contrast)
-            #     shot = cv2.addWeighted(shot , 1,np.zeros(shot.shape,shot.dtype),0,self.contrast)
-                
-            #print(height, width)
+
             self.mutex_for_gui.lock()
             if isinstance(self.source, cv2.VideoCapture):
                 self.model.predict(ImageInput = self.source,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness,IoU_change = self.IOU_value)
             else:
                 self.model.predict(ImageInput = shot,confCoef = self.confidence,contrast=self.contrast,brightness=self.brightness,IoU_change = self.IOU_value)
+            
             self.mutex_for_gui.unlock()
             self.res = self.model.showLastShot()
+            # cv2.imshow(res)
+            # cv2.waitkey(0)
             height, width, channels = self.res.shape
             # DRY KISS EXAMPLE
             if self.point1:
@@ -169,26 +168,37 @@ class controller():
                 cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
                 cv2.circle(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), 15, (0, 255, 0), -1)
                 cv2.line(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (255, 0, 0), 10)
-            if self.point1 and self.point2 and self.point3:
-                cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
-                cv2.circle(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), 15, (0, 255, 0), -1)
-                cv2.line(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (255, 0, 0), 10)
-
-                cv2.circle(self.res, (int(self.point3[0] * float(width/800)),int(self.point3[1] * float(height/600))), 15, (0, 255, 0), -1)
-                
-                cv2.line(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (int(self.point3[0] * float(width/800)),int(self.point3[1] * float(height/600))), (0, 0, 255), 10)
-
 
                 self.xpixlength = ((int(self.point2[0] * float(width/800)) - int(self.point1[0] * float(width/800)))**2 + (int(self.point2[1] * float(height/600)) - int(self.point1[1] * float(height/600)))**2 )**0.5
-                self.ypixlength = ((int(self.point3[0] * float(width/800)) - int(self.point2[0] * float(width/800)))**2 + (int(self.point3[1] * float(height/600)) - int(self.point2[1] * float(height/600)))**2 )**0.5
+                #self.ypixlength = ((int(self.point3[0] * float(width/800)) - int(self.point2[0] * float(width/800)))**2 + (int(self.point3[1] * float(height/600)) - int(self.point2[1] * float(height/600)))**2 )**0.5
                 
-                if self.xpixlength != 0 or self.ypixlength != 0:
-                    self.onepixdim = self.scale_value/self.xpixlength * self.scale_value/self.ypixlength
+
+                if self.xpixlength != 0:#or self.ypixlength != 0:
+                    self.onepixdim = (self.scale_value/self.xpixlength)**2 #* self.scale_value/self.ypixlength
                     self.xpixlength_mem = self.xpixlength
-                    self.ypixlength_mem = self.ypixlength
+                    #self.ypixlength_mem = self.ypixlength 
+
+            # if self.point1 and self.point2 and self.point3:
+            #     cv2.circle(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), 15, (0, 255, 0), -1)
+            #     cv2.circle(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), 15, (0, 255, 0), -1)
+            #     cv2.line(self.res, (int(self.point1[0] * float(width/800)),int(self.point1[1] * float(height/600))), (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (255, 0, 0), 10)
+
+            #     cv2.circle(self.res, (int(self.point3[0] * float(width/800)),int(self.point3[1] * float(height/600))), 15, (0, 255, 0), -1)
+                
+            #     cv2.line(self.res, (int(self.point2[0] * float(width/800)),int(self.point2[1] * float(height/600))), (int(self.point3[0] * float(width/800)),int(self.point3[1] * float(height/600))), (0, 0, 255), 10)
+
+
+            #     self.xpixlength = ((int(self.point2[0] * float(width/800)) - int(self.point1[0] * float(width/800)))**2 + (int(self.point2[1] * float(height/600)) - int(self.point1[1] * float(height/600)))**2 )**0.5
+            #     self.ypixlength = ((int(self.point3[0] * float(width/800)) - int(self.point2[0] * float(width/800)))**2 + (int(self.point3[1] * float(height/600)) - int(self.point2[1] * float(height/600)))**2 )**0.5
+            
+            #     if self.xpixlength != 0 or self.ypixlength != 0:
+            #         self.onepixdim = self.scale_value/self.xpixlength * self.scale_value/self.ypixlength
+            #         self.xpixlength_mem = self.xpixlength
+            #         self.ypixlength_mem = self.ypixlength
+
             h,w,ch = self.res.shape
             bytes_per_line = ch*w
-            convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888).scaled(800,600)#,QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+            convert_to_Qt_format = QImage(self.res.data, w, h, bytes_per_line, QImage.Format.Format_RGB888).scaled(800,600)#QtCore.Qt.AspectRatioMode.KeepAspectRatio)
 
             return convert_to_Qt_format
         
